@@ -20,10 +20,10 @@ as input and fill in the missing numbers while ensuring all constraints are met.
 
 ## Team members (Group 05) 👨‍💻
 
-- [Hoang Minh Thang](https://github.com/ThangHoang54)
-- [Nguyen An Nhien](https://github.com/koromaki88)
-- [Nguyen Hoang Son]
-- [Truong Ba An]
+- **Hoang Minh Thang <a href="https://github.com/ThangHoang" target="_blank"><img src="https://skillicons.dev/icons?i=github" width="20px" /></a>**
+- **Nguyen An Nhien <a href="https://github.com/koromaki88" target="_blank"><img src="https://skillicons.dev/icons?i=github" width="20px" /></a>**
+- **Nguyen Hoang Son**
+- **Truong Ba An**
 
 ## Contribution Score 🏅
 
@@ -34,7 +34,7 @@ as input and fill in the missing numbers while ensuring all constraints are met.
 
 ## Acknowledgment 🙏
 
-Special thanks to the course instructor [Dr. Tri Dang](https://github.com/TriDang) for providing guidance and resources for this group assignment.
+Special thanks to the course instructor **Dr. Tri Dang <a href="https://github.com/TriDang" target="_blank"><img src="https://skillicons.dev/icons?i=github" width="20px" /></a>** for providing guidance and resources for this group assignment.
 Additionally, gratitude to all contributors and users who help improve the system through feedback and suggestions.
 
 Thank you for visiting the AutoSudoku  repository. Happy coding! 🎉
