@@ -24,7 +24,7 @@ public class RMIT_Sudoku_Solver {
         return null;
     }
 
-    public static boolean isValid(int[][] board, int row, int col, int num) {
+    private static boolean isValid(int[][] board, int row, int col, int num) {
         for (int i = 0; i < SIZE; i++) {
             if (board[row][i] == num || board[i][col] == num) {
                 return false;
@@ -42,7 +42,7 @@ public class RMIT_Sudoku_Solver {
         return true;
     }
 
-    public static int[] findEmptyCell(int[][] board) {
+    private static int[] findEmptyCell(int[][] board) {
         for (int i = 0; i < SIZE; i++) {
             for (int j = 0; j < SIZE; j++) {
                 if (board[i][j] == 0) {
@@ -53,7 +53,7 @@ public class RMIT_Sudoku_Solver {
         return null;
     }
 
-    public static void constraintPropagation(int[][] board) {
+    private static void constraintPropagation(int[][] board) {
         boolean changed;
         do {
             changed = false;
@@ -91,8 +91,7 @@ public class RMIT_Sudoku_Solver {
     }
 
     public static void main(String[] args) {
-
-        int[][][] board = SudokuMap.allSudokuMaps;
+        int[][][] board = SudokuMap.getAllSudokuMaps;
 
         for(int[][] map : board) {
             if (solveSudoku(map) != null) {

@@ -22,8 +22,8 @@ as input and fill in the missing numbers while ensuring all constraints are met.
 
 - **Hoang Minh Thang <a href="https://github.com/ThangHoang" target="_blank"><img src="https://skillicons.dev/icons?i=github" width="20px" /></a>**
 - **Nguyen An Nhien <a href="https://github.com/koromaki88" target="_blank"><img src="https://skillicons.dev/icons?i=github" width="20px" /></a>**
-- **Nguyen Hoang Son**
-- **Truong Ba An**
+- **Nguyen Hoang Son <a href="https://github.com/08-10-2000" target="_blank"><img src="https://skillicons.dev/icons?i=github" width="20px" /></a>**
+- **Truong Ba An <a href="https://github.com/truongbaan" target="_blank"><img src="https://skillicons.dev/icons?i=github" width="20px" /></a>**
 
 ## Contribution Score 🏅
 
