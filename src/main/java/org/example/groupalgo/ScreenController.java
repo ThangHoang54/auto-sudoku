@@ -10,11 +10,13 @@ import javafx.scene.text.Text;
 public class ScreenController {
 
     @FXML
-    public Text execution_time;
+    public Text resultText; // this is constant text word: "Result"
     @FXML
-    public Text loading_text;
+    public Text executionText; //  this is constant text word: "Time"
     @FXML
-    public Text result_text;
+    public Text executionTime;
+    @FXML
+    public Text result;
     @FXML
     private ChoiceBox<String> cb_mapCase;
     @FXML
@@ -30,7 +32,7 @@ public class ScreenController {
         initializeGrid();
 
         cb_mapCase.setOnAction(_ -> {
-            result_text.setVisible(false); // hide text
+            result.setVisible(false); // hide text
             // Retrieve the selected index from the ComboBox
             map_index = cb_mapCase.getSelectionModel().getSelectedIndex();
             // Set the selected Sudoku map based on the retrieved index
@@ -42,11 +44,12 @@ public class ScreenController {
     }
 
     private void initializeGrid() {
+        executionTime.setText("None");
         for (int row = 0; row < 9; row++) {
             for (int col = 0; col < 9; col++) {
                 TextField cell = new TextField();
                 cell.setPrefSize(80, 80); // Adjust cell size for visibility
-
+                cell.setEditable(false);//make cell not able to receive input
                 cell.setStyle("-fx-font-size: 16; -fx-alignment: center; -fx-background-color: #F7F2E6; -fx-font-weight: bold;");
 
                 // Compute border widths
@@ -85,6 +88,8 @@ public class ScreenController {
 
     @FXML
     public void solveMap() {
+        long startTime = System.currentTimeMillis();
+
         int[][] board = new int[9][9];
         // Retrieve data from TextFields into int[][]
         for (int row = 0; row < 9; row++) {
@@ -102,19 +107,25 @@ public class ScreenController {
             System.out.println("Solved Sudoku: Case " + (map_index + 1) + " successfully !!!\n");
             RMIT_Sudoku_Solver.printBoard(map);
             System.out.println();
-            result_text.setText("Solved Sudoku: Case " + (map_index + 1) + " successfully");
-            result_text.setVisible(true); // show result_text
+            result.setText("Solved Sudoku: Case " + (map_index + 1) + " successfully");
+            result.setVisible(true); // show result
             initializeGrid();
         } else {
             System.out.println("No solution found");
-            result_text.setText("No solution found");
-            result_text.setVisible(true); // show result_text
+            result.setText("No solution found");
+            result.setVisible(true); // show result
         }
+
+        long endTime = System.currentTimeMillis();
+        long duration = endTime - startTime; // Duration in milliseconds
+
+        System.out.println("Function executed in: " + duration + " milliseconds");
+        executionTime.setText(duration + " milliseconds");
     }
 
     @FXML
     void reset(){
-        result_text.setVisible(false); // hide text
+        result.setVisible(false); // hide text
         map = SudokuMap.getAllSudokuMaps[map_index];
         initializeGrid();
     }
