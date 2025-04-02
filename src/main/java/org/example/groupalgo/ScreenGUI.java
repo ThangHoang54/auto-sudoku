@@ -1,4 +1,4 @@
-package org.example.autosudoku;
+package org.example.groupalgo;
 
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
@@ -7,12 +7,12 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 
-public class AutoSudokuApplication extends Application {
+public class ScreenGUI extends Application {
     @Override
     public void start(Stage stage) throws IOException {
-        FXMLLoader fxmlLoader = new FXMLLoader(AutoSudokuApplication.class.getResource("hello-view.fxml"));
-        Scene scene = new Scene(fxmlLoader.load(), 320, 240);
-        stage.setTitle("Hello!");
+        FXMLLoader fxmlLoader = new FXMLLoader(ScreenGUI.class.getResource("sudoku.fxml"));
+        Scene scene = new Scene(fxmlLoader.load(), 950, 600);
+        stage.setTitle("Sudoku Solver");
         stage.setScene(scene);
         stage.show();
     }

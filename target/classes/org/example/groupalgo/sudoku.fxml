@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.text.Text?>
+
+<AnchorPane prefHeight="600.0" prefWidth="950.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.groupalgo.ScreenController">
+    <children>
+        <GridPane fx:id="sudoku" gridLinesVisible="true" layoutX="149.0" layoutY="163.0" prefHeight="337.0" prefWidth="652.0">
+            <columnConstraints>
+                <ColumnConstraints fillWidth="false" hgrow="SOMETIMES" />
+                <ColumnConstraints fillWidth="false" hgrow="SOMETIMES" />
+                <ColumnConstraints fillWidth="false" hgrow="SOMETIMES" />
+                <ColumnConstraints fillWidth="false" hgrow="SOMETIMES" />
+                <ColumnConstraints fillWidth="false" hgrow="SOMETIMES" />
+                <ColumnConstraints fillWidth="false" hgrow="SOMETIMES" />
+                <ColumnConstraints fillWidth="false" hgrow="SOMETIMES" />
+                <ColumnConstraints fillWidth="false" hgrow="SOMETIMES" />
+                <ColumnConstraints fillWidth="false" hgrow="SOMETIMES" />
+            </columnConstraints>
+            <rowConstraints>
+                <RowConstraints fillHeight="false" vgrow="SOMETIMES" />
+                <RowConstraints fillHeight="false" vgrow="SOMETIMES" />
+                <RowConstraints fillHeight="false" vgrow="SOMETIMES" />
+                <RowConstraints fillHeight="false" vgrow="SOMETIMES" />
+                <RowConstraints fillHeight="false" vgrow="SOMETIMES" />
+                <RowConstraints fillHeight="false" vgrow="SOMETIMES" />
+                <RowConstraints fillHeight="false" vgrow="SOMETIMES" />
+                <RowConstraints fillHeight="false" vgrow="SOMETIMES" />
+                <RowConstraints fillHeight="false" vgrow="SOMETIMES" />
+            </rowConstraints>
+        </GridPane>
+        <Button fx:id="Map1" layoutX="40.0" layoutY="47.0" mnemonicParsing="false" onAction="#mapOne" text="Default Map 1" />
+        <Button fx:id="Map2" layoutX="149.0" layoutY="47.0" mnemonicParsing="false" onAction="#mapTwo" text="Default Map 2" />
+        <Button fx:id="Map3" layoutX="263.0" layoutY="47.0" mnemonicParsing="false" onAction="#mapThree" text="Default Map 3" />
+        <Button fx:id="custom" layoutX="664.0" layoutY="47.0" mnemonicParsing="false" onAction="#customize" text="Custom your own map" />
+        <Button fx:id="solve" layoutX="843.0" layoutY="47.0" mnemonicParsing="false" onAction="#solveMap" text="Solve" />
+        <Text layoutX="442.0" layoutY="120.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Sudoku map" />
+    </children>
+</AnchorPane>
