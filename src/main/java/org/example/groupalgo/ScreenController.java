@@ -6,17 +6,13 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
+import java.text.DecimalFormat;
 
 public class ScreenController {
-
     @FXML
-    public Text resultText; // this is constant text word: "Result"
+    private Text executionTime;
     @FXML
-    public Text executionText; //  this is constant text word: "Time"
-    @FXML
-    public Text executionTime;
-    @FXML
-    public Text result;
+    private Text resultAnnounce;
     @FXML
     private ChoiceBox<String> cb_mapCase;
     @FXML
@@ -32,7 +28,8 @@ public class ScreenController {
         initializeGrid();
 
         cb_mapCase.setOnAction(_ -> {
-            result.setVisible(false); // hide text
+            resultAnnounce.setText("Click Solve button to get the result");
+            executionTime.setText("N/A");
             // Retrieve the selected index from the ComboBox
             map_index = cb_mapCase.getSelectionModel().getSelectedIndex();
             // Set the selected Sudoku map based on the retrieved index
@@ -44,7 +41,7 @@ public class ScreenController {
     }
 
     private void initializeGrid() {
-        executionTime.setText("None");
+
         for (int row = 0; row < 9; row++) {
             for (int col = 0; col < 9; col++) {
                 TextField cell = new TextField();
@@ -68,11 +65,9 @@ public class ScreenController {
                     if(givenMap[row][col] == 0) {
                         cell.setStyle(cell.getStyle() + "-fx-text-fill: #A39172;");
                     }
-
                     cell.setText(String.valueOf(map[row][col]));
                     cell.setEditable(false);
                 }
-
                 presentNum[row][col] = cell;
                 sudoku_board.add(cell, col, row);
             }
@@ -88,7 +83,8 @@ public class ScreenController {
 
     @FXML
     public void solveMap() {
-        long startTime = System.currentTimeMillis();
+        long startTime = System.nanoTime(); // Start Time
+        long endTime = 0, duration = 0;
 
         int[][] board = new int[9][9];
         // Retrieve data from TextFields into int[][]
@@ -103,29 +99,31 @@ public class ScreenController {
             }
         }
 
-        if ((map = RMIT_Sudoku_Solver.solveSudoku(board))  != null) {
+        if ((map = RMIT_Sudoku_Solver.solveSudoku(board))  != null) { // Solved successfully case
+            endTime = System.nanoTime(); // End Time
             System.out.println("Solved Sudoku: Case " + (map_index + 1) + " successfully !!!\n");
             RMIT_Sudoku_Solver.printBoard(map);
             System.out.println();
-            result.setText("Solved Sudoku: Case " + (map_index + 1) + " successfully");
-            result.setVisible(true); // show result
+            resultAnnounce.setText("Solved Sudoku: Case " + (map_index + 1) + " successfully !!!");
             initializeGrid();
-        } else {
+        } else { // No solution case
             System.out.println("No solution found");
-            result.setText("No solution found");
-            result.setVisible(true); // show result
+            resultAnnounce.setText("No solution found");
         }
 
-        long endTime = System.currentTimeMillis();
-        long duration = endTime - startTime; // Duration in milliseconds
+        if(endTime != 0) {
+            duration = (endTime - startTime) / 1_000_000; // Convert nanoseconds to milliseconds
+        }
 
-        System.out.println("Function executed in: " + duration + " milliseconds");
-        executionTime.setText(duration + " milliseconds");
+        //System.out.println("Start time: " + startTime + ", end time: " + endTime + ", duration: " + duration + " ms");
+        System.out.println((map != null) ? "Total executed time take to solve the Sudoku is in: " + duration + " ms" : "");
+        executionTime.setText((map != null) ?  duration + " ms\n" : "N/A");
     }
 
     @FXML
     void reset(){
-        result.setVisible(false); // hide text
+        resultAnnounce.setText("Click Solve button to get the result");
+        executionTime.setText("N/A");
         map = SudokuMap.getAllSudokuMaps[map_index];
         initializeGrid();
     }
