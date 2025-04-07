@@ -4,21 +4,21 @@ package org.example.groupalgo;
 public class RMIT_Sudoku_Solver {
     private static final int SIZE = 9;
 
-    public static int[][] solveSudoku(int[][] board) {
-        constraintPropagation(board);
-        int[] emptyCell = findEmptyCell(board);
+    public static int[][] solve(int[][] puzzle) {
+        constraintPropagation(puzzle);
+        int[] emptyCell = findEmptyCell(puzzle);
 
-        if (emptyCell == null) return board;
+        if (emptyCell == null) return puzzle;
 
         int row = emptyCell[0], col = emptyCell[1];
         for (int num = 1; num <= 9; num++) {
-            if (isValid(board, row, col, num)) {
-                board[row][col] = num;
-                int[][] result = solveSudoku(board);
+            if (isValid(puzzle, row, col, num)) {
+                puzzle[row][col] = num;
+                int[][] result = solve(puzzle);
                 if (result != null) {
                     return result;
                 }
-                board[row][col] = 0; // Backtracking step
+                puzzle[row][col] = 0; // Backtracking step
             }
         }
         return null;
@@ -94,7 +94,7 @@ public class RMIT_Sudoku_Solver {
         int[][][] board = SudokuMap.getAllSudokuMaps;
 
         for(int[][] map : board) {
-            if (solveSudoku(map) != null) {
+            if (solve(map) != null) {
                 printBoard(map);
                 System.out.println();
             } else {
