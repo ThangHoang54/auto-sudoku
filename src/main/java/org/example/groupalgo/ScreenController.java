@@ -99,7 +99,7 @@ public class ScreenController {
             }
         }
 
-        if ((map = RMIT_Sudoku_Solver.solveSudoku(board))  != null) { // Solved successfully case
+        if ((map = RMIT_Sudoku_Solver.solve(board))  != null) { // Solved successfully case
             endTime = System.nanoTime(); // End Time
             System.out.println("Solved Sudoku: Case " + (map_index + 1) + " successfully !!!\n");
             RMIT_Sudoku_Solver.printBoard(map);
