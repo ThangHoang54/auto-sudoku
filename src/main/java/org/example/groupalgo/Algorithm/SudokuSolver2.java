@@ -1,14 +1,15 @@
-package org.example.groupalgo;
+package org.example.groupalgo.Algorithm;
+
+import org.example.groupalgo.SudokuMap;
 
 import java.util.LinkedList;
 import java.util.Queue;
-
-//NOT FINAL
-public class RMIT_Sudoku_Solver {
+//this is backtracking with naked single and hidden single
+public class SudokuSolver2 {
     private static final int SIZE = 9;
 
     // The main recursive solver.
-    public static int[][] solve(int[][] board) {
+    public static int[][] solveSudoku(int[][] board) {
 
         int[] emptyCell = findEmptyCell(board);
         if (emptyCell == null) return board;
@@ -23,7 +24,7 @@ public class RMIT_Sudoku_Solver {
                 // Also try the hidden single technique.
                 Queue<int[]> hiddenSingleQueue = hiddenSingle(board);
 
-                int[][] result = solve(board);
+                int[][] result = solveSudoku(board);
                 if (result != null) {
                     return result;
                 }
@@ -228,7 +229,7 @@ public class RMIT_Sudoku_Solver {
         int[][][] boards = SudokuMap.getAllSudokuMaps;
 
         for (int[][] map : boards) {
-            if (solve(map) != null) {
+            if (solveSudoku(map) != null) {
                 printBoard(map);
                 System.out.println();
             } else {
