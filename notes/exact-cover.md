@@ -13,28 +13,29 @@ Example: Given matrix of 0s and 1s, does it have a set of rows containing exactl
 - Is an algorithm for solving the *exact cover* problem.
 - Is a recursive, nondeterministic, depth-first, backtracking algorithm to demonstrate the utility of *dancing links*.\
 **The Algorithm**:
-> If matrix $A$ is empty, the problem is solved; terminate successfully.
-> Otherwise choose a column, $c$ (deterministically).
-> Choose a row, $r$, such that $A[r,c] = 1$  (nondeterministically).
-> Include $r$ in the partial solution.
-> For each $j$ such that $A[r,j] = 1$,
-> 	delete column $j$ from matrix $A$;
-> 	for each $i$ such that $A[i,j] = 1$,
-> 		delete row $i$ from matrix $A$.
-> Repeat this algorithm recursively on the reduced matrix $A$.
+```
+If matrix A is empty, the problem is solved; terminate successfully.
+Otherwise choose a column, $c$ (deterministically).
+Choose a row, r, such that A[r,c] = 1  (nondeterministically).
+Include r in the partial solution.
+For each j such that A[r,j] = 1,
+	delete column j from matrix A;
+	or each i such that A[i,j] = 1,
+		delete row i from matrix A.
+Repeat this algorithm recursively on the reduced matrix A.
+```
 ### Dancing Links (DLX)
 - Is a technique for adding and deleting a node from a circular doubly linked list.
-- Particularly useful for efficiently implementing backtracking algorithms such as *Knuth's Algorithm X*.\
-**Remove a node**: Let $L[x]$ and $R[x]$ point to the predecessor and successor of that element.
+- Particularly useful for efficiently implementing backtracking algorithms such as *Knuth's Algorithm X*.
+- **Remove a node**: Let $L[x]$ and $R[x]$ point to the predecessor and successor of that element.\
 $$L[R[x]] \leftarrow L[x], \quad R[L[x]] \leftarrow R[x] \qquad \text{(1)}$$
-Example:
 ```java
 A <-> B <-> C <-> A
 
 L[R[B]] <- L[B] // L[C] = A
 R[L[B]] <- R[B] // R[A] = C
 ```
-**Put node back**:
+- **Put node back**:\
 $$L[R[x]] \leftarrow x, \quad R[L[x]] \leftarrow x\qquad \text{(2)}$$
 ```java
 A <-> C <-> A
