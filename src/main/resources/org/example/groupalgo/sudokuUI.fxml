@@ -36,6 +36,7 @@
                                 <String fx:value="Map Case 2" />
                                 <String fx:value="Map Case 3" />
                                 <String fx:value="Map Case 4" />
+                                <String fx:value="Map Case 5" />
                             </FXCollections>
                         </items>
                         <value>Map Case 1</value>

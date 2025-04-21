@@ -56,11 +56,27 @@ public class SudokuMap {
             {0, 0, 0, 0, 0, 0, 0, 4, 0}
     };
 
+    // Theoretical 17 clue
+    // https://www.youtube.com/watch?v=jU_W53M5aMQ
+    // https://cracking-the-cryptic.web.app/sudoku/PMhgbbQRRb
+    private static final int[][] sudokuMap5 = {
+            {0, 2, 9, 0, 0, 0, 4, 0, 0},
+            {0, 0, 0, 5, 0, 0, 1, 0, 0},
+            {0, 4, 0, 0, 0, 0, 0, 0, 0},
+            {0, 0, 0, 0, 4, 2, 0, 0, 0},
+            {6, 0, 0, 0, 0, 0, 0, 7, 0},
+            {5, 0, 0, 0, 0, 0, 0, 0, 0},
+            {7, 0, 0, 3, 0, 0, 0, 0, 5},
+            {0, 1, 0, 0, 9, 0, 0, 0, 0},
+            {0, 0, 0, 0, 0, 0, 0, 6, 0}
+    };
+
     //only use in the solver (terminal version) in for loop
     public static int[][][] getAllSudokuMaps = {
             sudokuMap1,
             sudokuMap2,
             sudokuMap3,
-            sudokuMap4
+            sudokuMap4,
+            sudokuMap5
     };
 }

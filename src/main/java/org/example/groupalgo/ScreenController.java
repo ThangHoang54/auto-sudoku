@@ -6,7 +6,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
-import java.text.DecimalFormat;
+import org.example.groupalgo.Algorithm.DancingLinksPureLinkedList;
 
 public class ScreenController {
     @FXML
