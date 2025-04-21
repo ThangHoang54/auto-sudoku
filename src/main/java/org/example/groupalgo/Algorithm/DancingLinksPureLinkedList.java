@@ -7,7 +7,6 @@ import java.util.List;
 
 public class DancingLinksPureLinkedList {
     private static final int SIZE = 9;
-    private static final ColumnNode[] columns = new ColumnNode[324];
 
     private static class DataNode {
         DataNode L, R, U, D;
