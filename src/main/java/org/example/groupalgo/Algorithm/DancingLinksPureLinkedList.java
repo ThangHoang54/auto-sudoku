@@ -94,7 +94,7 @@ public class DancingLinksPureLinkedList {
     public static int[][] solve(int[][] puzzle) {
         // Validate input
         if (puzzle == null || puzzle.length != 9 || puzzle[0].length != 9) {
-            throw new IllegalArgumentException("Invalid puzzle dimensions");
+            return null;
         }
 
         // Initialize DLX structure
@@ -105,7 +105,7 @@ public class DancingLinksPureLinkedList {
             for (int col = 0; col < 9; col++) {
                 int num = puzzle[row][col];
                 if (num < 0 || num > 9) {
-                    throw new IllegalArgumentException("Invalid number in puzzle: " + num);
+                    return null;
                 }
                 if (num != 0) {
                     addKnownConstraint(row, col, num - 1);
@@ -125,7 +125,7 @@ public class DancingLinksPureLinkedList {
         // Solve using DLX
         answer = new ArrayList<>();
         if (!search(0)) {
-            throw new RuntimeException("No solution exists for the given puzzle");
+            return null;
         }
 
         // Convert solution back to sudoku grid
@@ -151,7 +151,7 @@ public class DancingLinksPureLinkedList {
             if (current.name == name) return current;
             current = (ColumnNode) current.R;
         }
-        throw new IllegalArgumentException("Column not found: " + name);
+        return null;
     }
 
     private static void addKnownConstraint(int row, int col, int num) {
@@ -160,6 +160,10 @@ public class DancingLinksPureLinkedList {
         ColumnNode rowCol = findColumn(81 + row * 9 + num);
         ColumnNode colCol = findColumn(162 + col * 9 + num);
         ColumnNode boxCol = findColumn(243 + box * 9 + num);
+
+        if (cellCol == null || rowCol == null || colCol == null || boxCol == null) {
+            return;
+        }
 
         DataNode rowStart = new DataNode(cellCol);
         cellCol.size++;
@@ -278,27 +282,26 @@ public class DancingLinksPureLinkedList {
         int[][][] boards = SudokuMap.getAllSudokuMaps;
 
         for (int[][] map : boards) {
-            try {
-                // Create a copy of the original puzzle
-                int[][] puzzleCopy = new int[9][9];
-                for (int i = 0; i < 9; i++) {
-                    System.arraycopy(map[i], 0, puzzleCopy[i], 0, 9);
-                }
-
-                // Solve the copy and get the solution
-                int[][] solution = solve(puzzleCopy);
-
-                // Print both original and solution
-                System.out.println("Original puzzle:");
-                printBoard(map);
-                System.out.println("\nSolution:");
-                printBoard(solution);
-                System.out.println("\n----------------------\n");
-            } catch (RuntimeException e) {
-                System.out.println("No solution exists for puzzle:");
-                printBoard(map);
-                System.out.println("\n----------------------\n");
+            // Create a copy of the original puzzle
+            int[][] puzzleCopy = new int[9][9];
+            for (int i = 0; i < 9; i++) {
+                System.arraycopy(map[i], 0, puzzleCopy[i], 0, 9);
             }
+
+            // Solve the copy and get the solution
+            int[][] solution = solve(puzzleCopy);
+
+            // Print both original and solution
+            System.out.println("Original puzzle:");
+            printBoard(map);
+            System.out.println("\nSolution:");
+
+            if (solution == null) {
+                System.out.println("No solution exists for this puzzle.");
+            } else {
+                printBoard(solution);
+            }
+            System.out.println("\n----------------------\n");
         }
     }
 }
