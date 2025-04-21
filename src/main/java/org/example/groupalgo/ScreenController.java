@@ -18,7 +18,6 @@ public class ScreenController {
     @FXML
     private GridPane sudoku_board;
 
-    private final TextField[][] presentNum = new TextField[9][9];
     private int map_index;
     private int[][] map = SudokuMap.getAllSudokuMaps[0];
     private int[][] givenMap = SudokuMap.getAllSudokuMaps[0];
@@ -68,7 +67,6 @@ public class ScreenController {
                     cell.setText(String.valueOf(map[row][col]));
                     cell.setEditable(false);
                 }
-                presentNum[row][col] = cell;
                 sudoku_board.add(cell, col, row);
             }
         }
@@ -87,16 +85,9 @@ public class ScreenController {
         long endTime = 0, duration = 0;
 
         int[][] board = new int[9][9];
-        // Retrieve data from TextFields into int[][]
-        for (int row = 0; row < 9; row++) {
-            for (int col = 0; col < 9; col++) {
-                String text = presentNum[row][col].getText().trim();
-                if (!text.isEmpty() && text.matches("\\d")) {
-                    board[row][col] = Integer.parseInt(text);
-                } else {
-                    board[row][col] = 0; // Empty cell
-                }
-            }
+        // Retrieve data from the original board into int[][]
+        for (int i = 0; i < 9; i++) {
+            System.arraycopy(givenMap[i], 0, board[i], 0, 9);
         }
 
         if ((map = RMIT_Sudoku_Solver.solve(board))  != null) { // Solved successfully case
