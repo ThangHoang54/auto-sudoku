@@ -7,7 +7,7 @@ import java.util.List;
 
 public class DancingLinksArray {
     private static final int SIZE = 9;
-    private static final ColumnNode[] columns = new ColumnNode[324];
+    private static final ColumnNode[] columns = new ColumnNode[324];// base on 4 constraints, each constraint use 81 (9x9)
 
     private static class DataNode {
         DataNode L, R, U, D;
