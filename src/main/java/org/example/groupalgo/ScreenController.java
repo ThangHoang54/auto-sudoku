@@ -6,6 +6,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
+import org.example.groupalgo.Algorithm.ConstraintSatisfaction;
 import org.example.groupalgo.Algorithm.DancingLinksArray;
 import org.example.groupalgo.Algorithm.DancingLinksPureLinkedList;
 
@@ -91,10 +92,10 @@ public class ScreenController {
             System.arraycopy(givenMap[i], 0, board[i], 0, 9);
         }
 
-        if ((map = DancingLinksArray.solve(board))  != null) { // Solved successfully case
+        if ((map = ConstraintSatisfaction.solve(board))  != null) { // Solved successfully case
             endTime = System.nanoTime(); // End Time
             System.out.println("Solved Sudoku: Case " + (map_index + 1) + " successfully !!!\n");
-            DancingLinksArray.printBoard(map);
+            ConstraintSatisfaction.printBoard(map);
             System.out.println();
             resultAnnounce.setText("Solved Sudoku: Case " + (map_index + 1) + " successfully !!!");
             initializeGrid();

@@ -59,6 +59,16 @@ public class TimeTesting {
         endTime = System.nanoTime();
         System.out.println("Time taken: " + (endTime - startTime) + " nanosecond for pure backtrack (this is int[][] return)");
 
+        boards = deepCopyBoards(SudokuMap.getAllSudokuMaps);
+        startTime = System.nanoTime();
+        for(int[][] map : boards){
+            if(ConstraintSatisfaction.solve(map) != null){
 
+            } else{
+                System.out.println("No solution exists");
+            }
+        }
+        endTime = System.nanoTime();
+        System.out.println("Time taken: " + (endTime - startTime) + " nanosecond for constraint satisfaction.");
     }
 }
