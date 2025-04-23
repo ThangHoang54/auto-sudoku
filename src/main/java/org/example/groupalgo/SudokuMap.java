@@ -1,6 +1,7 @@
 package org.example.groupalgo;
 
-//this will be place to store default map as well as a variable for a customMap input
+// This will be the place to store default map as well as a variable for a customMap input
+// Puzzle 2-4 source: https://sandiway.arizona.edu/sudoku/examples.html
 
 public class SudokuMap {
 
@@ -17,7 +18,7 @@ public class SudokuMap {
             {0, 0, 0, 0, 8, 0, 0, 7, 9}
     };
 
-    // Medium
+    // Intermediate: Daily Telegraph January 19th "Diabolical"
     private static final int[][] sudokuMap2 = {
             {0, 2, 0, 6, 0, 8, 0, 0, 0},
             {5, 8, 0, 0, 0, 9, 7, 0, 0},
@@ -30,7 +31,7 @@ public class SudokuMap {
             {0, 0, 0, 3, 0, 6, 0, 9, 0}
     };
 
-    // Difficult
+    // Difficult: Vegard Hanssen puzzle 2155141
     private static final int[][] sudokuMap3 = {
             {0, 0, 0, 6, 0, 0, 4, 0, 0},
             {7, 0, 0, 0, 0, 3, 6, 0, 0},
@@ -43,7 +44,7 @@ public class SudokuMap {
             {0, 2, 0, 0, 0, 0, 1, 0, 0}
     };
 
-    //Not fun
+    // Not fun: Challenge 1 from Sudoku Solver by Logic
     private static final int[][] sudokuMap4 = {
             {0, 2, 0, 0, 0, 0, 0, 0, 0},
             {0, 0, 0, 6, 0, 0, 0, 0, 3},
@@ -71,8 +72,23 @@ public class SudokuMap {
             {0, 0, 0, 0, 0, 0, 0, 6, 0}
     };
 
-    //handle error due for map with no solution
+    // David Filmer's Unsolvable #28
+    // https://www.sudokuwiki.org/Print_A_New_Metric_for_Difficult_Sudoku_Puzzles
+    // https://www.sudokuwiki.org/sudoku.htm?bd=600008940900006100070040000200610000000000200089002000000060005000000030800001600
     private static final int[][] sudokuMap6 = {
+            {6, 0, 0, 0, 0, 8, 9, 4, 0},
+            {9, 0, 0, 0, 0, 6, 1, 0, 0},
+            {0, 7, 0, 0, 4, 0, 0, 0, 0},
+            {2, 0, 0, 6, 1, 0, 0, 0, 0},
+            {0, 0, 0, 0, 0, 0, 2, 0, 0},
+            {0, 8, 9, 0, 0, 2, 0, 0, 0},
+            {0, 0, 0, 0, 6, 0, 0, 0, 5},
+            {0, 0, 0, 0, 0, 0, 0, 3, 0},
+            {8, 0, 0, 0, 0, 1, 6, 0, 0}
+    };
+
+    // No solution example
+    private static final int[][] sudokuMap7 = {
             {0, 2, 9, 0, 0, 0, 4, 0, 0},
             {0, 0, 0, 5, 0, 0, 1, 0, 0},
             {0, 4, 0, 0, 0, 0, 0, 0, 0},
@@ -91,6 +107,7 @@ public class SudokuMap {
             sudokuMap3,
             sudokuMap4,
             sudokuMap5,
-            sudokuMap6
+            sudokuMap6,
+            sudokuMap7
     };
 }

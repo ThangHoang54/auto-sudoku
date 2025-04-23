@@ -62,7 +62,7 @@ public class SudokuBacktracking {
     }
 
     // Print the board to standard output.
-    public static void print(int[][] board) {
+    public static void printBoard(int[][] board) {
         for (int i = 0; i < SIZE; i++) {
             for (int j = 0; j < SIZE; j++) {
                 System.out.print(board[i][j] + " ");
@@ -78,7 +78,7 @@ public class SudokuBacktracking {
         for (int[][] board : boards) {
             int[][] solvedBoard = solve(board);
             if (solvedBoard != null) {
-                print(solvedBoard);
+                printBoard(solvedBoard);
                 System.out.println();
             } else {
                 System.out.println("No solution exists");

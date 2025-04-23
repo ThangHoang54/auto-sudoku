@@ -9,6 +9,7 @@ import javafx.scene.text.Text;
 import org.example.groupalgo.Algorithm.ConstraintSatisfaction;
 import org.example.groupalgo.Algorithm.DancingLinksArray;
 import org.example.groupalgo.Algorithm.DancingLinksPureLinkedList;
+import org.example.groupalgo.Algorithm.SudokuBacktracking;
 
 public class ScreenController {
     @FXML
@@ -92,10 +93,10 @@ public class ScreenController {
             System.arraycopy(givenMap[i], 0, board[i], 0, 9);
         }
 
-        if ((map = ConstraintSatisfaction.solve(board))  != null) { // Solved successfully case
+        if ((map = SudokuBacktracking.solve(board))  != null) { // Solved successfully case
             endTime = System.nanoTime(); // End Time
             System.out.println("Solved Sudoku: Case " + (map_index + 1) + " successfully !!!\n");
-            ConstraintSatisfaction.printBoard(map);
+            SudokuBacktracking.printBoard(map);
             System.out.println();
             resultAnnounce.setText("Solved Sudoku: Case " + (map_index + 1) + " successfully !!!");
             initializeGrid();
