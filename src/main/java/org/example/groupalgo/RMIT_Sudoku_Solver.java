@@ -1,217 +1,268 @@
 package org.example.groupalgo;
 
-import java.util.LinkedList;
-import java.util.Queue;
+import java.util.ArrayList;
+import java.util.List;
 
-//NOT FINAL
+//Choose DancingLinksArray as the final solution
 public class RMIT_Sudoku_Solver {
     private static final int SIZE = 9;
+    private static final ColumnNode[] columns = new ColumnNode[324];// base on 4 constraints, each constraint use 81 (9x9)
 
-    // The main recursive solver.
-    public static int[][] solve(int[][] board) {
+    private static class DataNode {
+        DataNode L, R, U, D;
+        ColumnNode C;
 
-        int[] emptyCell = findEmptyCell(board);
-        if (emptyCell == null) return board;
+        public DataNode() {
+            L = R = U = D = this;
+        }
 
-        int row = emptyCell[0], col = emptyCell[1];
-        for (int num = 1; num <= 9; num++) {
-            if (isValid(board, row, col, num)) {
-                board[row][col] = num;
+        public DataNode(ColumnNode c) {
+            this();
+            C = c;
+        }
 
-                // Apply the naked single technique
-                Queue<int[]> nakedSingleQueue = nakedSingle(board);
-                // Also try the hidden single technique.
-                Queue<int[]> hiddenSingleQueue = hiddenSingle(board);
+        public void linkDown(DataNode node) {
+            node.D = D;
+            node.D.U = node;
+            node.U = this;
+            D = node;
+        }
 
-                int[][] result = solve(board);
-                if (result != null) {
-                    return result;
-                }
+        public void linkRight(DataNode node) {
+            node.R = R;
+            node.R.L = node;
+            node.L = this;
+            R = node;
+        }
 
-                // Backtracking step: undo assignment.
-                board[row][col] = 0;
-                // Reverse the naked single moves.
-                while (!nakedSingleQueue.isEmpty()) {
-                    int[] cell = nakedSingleQueue.poll();
-                    board[cell[0]][cell[1]] = 0;
-                }
-                // Reverse the hidden single moves.
-                while (!hiddenSingleQueue.isEmpty()) {
-                    int[] cell = hiddenSingleQueue.poll();
-                    board[cell[0]][cell[1]] = 0;
+        public void unlinkLR() {
+            L.R = R;
+            R.L = L;
+        }
+
+        public void relinkLR() {
+            L.R = this;
+            R.L = this;
+        }
+
+        public void unlinkUD() {
+            U.D = D;
+            D.U = U;
+        }
+
+        public void relinkUD() {
+            U.D = this;
+            D.U = this;
+        }
+    }
+
+    private static class ColumnNode extends DataNode {
+        int size;
+        int name;
+
+        public ColumnNode(int n) {
+            super();
+            size = 0;
+            name = n;
+            C = this;
+        }
+
+        public void cover() {
+            unlinkLR();
+            for (DataNode i = D; i != this; i = i.D) {
+                for (DataNode j = i.R; j != i; j = j.R) {
+                    j.unlinkUD();
+                    j.C.size--;
                 }
             }
         }
-        return null;
+
+        public void uncover() {
+            for (DataNode i = U; i != this; i = i.U) {
+                for (DataNode j = i.L; j != i; j = j.L) {
+                    j.C.size++;
+                    j.relinkUD();
+                }
+            }
+            relinkLR();
+        }
     }
 
-    // Check if placing 'num' at (row, col) is valid.
-    private static boolean isValid(int[][] board, int row, int col, int num) {
-        for (int i = 0; i < SIZE; i++) {
-            if (board[row][i] == num || board[i][col] == num) {
-                return false;
+    private static ColumnNode header;
+    private static List<DataNode> answer;
+
+    public static int[][] solve(int[][] puzzle) {
+        // Validate input
+        if (puzzle == null || puzzle.length != 9 || puzzle[0].length != 9) {
+            return null;
+        }
+
+        // Initialize DLX structure
+        initDLX();
+
+        // Add constraints for the given puzzle
+        for (int row = 0; row < 9; row++) {
+            for (int col = 0; col < 9; col++) {
+                int num = puzzle[row][col];
+                if (num < 0 || num > 9) {
+                    return null;
+                }
+                if (num != 0) {
+                    addKnownConstraint(row, col, num - 1);
+                }
             }
         }
 
-        int boxRow = (row / 3) * 3, boxCol = (col / 3) * 3;
-        for (int i = 0; i < 3; i++) {
-            for (int j = 0; j < 3; j++) {
-                if (board[boxRow + i][boxCol + j] == num) {
-                    return false;
+        // Add all possible constraints for empty cells
+        for (int row = 0; row < 9; row++) {
+            for (int col = 0; col < 9; col++) {
+                if (puzzle[row][col] == 0) {
+                    addUnknownConstraints(row, col);
                 }
             }
         }
-        return true;
+
+        // Solve using DLX
+        answer = new ArrayList<>();
+        if (!search(0)) {
+            return null;
+        }
+
+        // Convert solution back to sudoku grid
+        return convertSolutionToGrid();
     }
 
-    // Find the next empty cell; returns null if no empty cell remains.
-    private static int[] findEmptyCell(int[][] board) {
-        for (int i = 0; i < SIZE; i++) {
-            for (int j = 0; j < SIZE; j++) {
-                if (board[i][j] == 0) {
-                    return new int[]{i, j};
-                }
+    private static void initDLX() {
+        // Create header node
+        header = new ColumnNode(-1);
+
+        // Create column nodes for all 324 constraints
+        ColumnNode prev = header;
+        for (int i = 0; i < 324; i++) {
+            columns[i] = new ColumnNode(i);
+            prev.linkRight(columns[i]);
+            prev = columns[i];
+        }
+    }
+
+    private static void addKnownConstraint(int row, int col, int num) {
+        // Calculate constraint positions
+        int box = (row / 3) * 3 + (col / 3);
+        int cellConstraint = row * 9 + col;
+        int rowConstraint = 81 + row * 9 + num;
+        int colConstraint = 162 + col * 9 + num;
+        int boxConstraint = 243 + box * 9 + num;
+
+        // Get the column nodes directly from the array
+        ColumnNode[] cols = {
+                columns[cellConstraint],
+                columns[rowConstraint],
+                columns[colConstraint],
+                columns[boxConstraint]
+        };
+
+        // Create the row in DLX structure
+        DataNode rowStart = new DataNode(cols[0]);
+        cols[0].size++;
+        cols[0].U.linkDown(rowStart);
+
+        DataNode curr = rowStart;
+        for (int i = 1; i < 4; i++) {
+            DataNode newNode = new DataNode(cols[i]);
+            curr.linkRight(newNode);
+            cols[i].size++;
+            cols[i].U.linkDown(newNode);
+            curr = newNode;
+        }
+    }
+
+    private static void addUnknownConstraints(int row, int col) {
+        // For empty cells, add all 9 possible numbers
+        for (int num = 0; num < 9; num++) {
+            addKnownConstraint(row, col, num);
+        }
+    }
+
+    private static boolean search(int k) {
+        if (header.R == header) {
+            return true; // Solution found
+        }
+
+        // Choose column with minimum size
+        ColumnNode col = selectColumn();
+        col.cover();
+
+        for (DataNode r = col.D; r != col; r = r.D) {
+            answer.add(r);
+
+            for (DataNode j = r.R; j != r; j = j.R) {
+                j.C.cover();
+            }
+
+            if (search(k + 1)) {
+                return true;
+            }
+
+            // Backtrack
+            answer.removeLast();
+
+            for (DataNode j = r.L; j != r; j = j.L) {
+                j.C.uncover();
             }
         }
-        return null;
+
+        col.uncover();
+        return false;
     }
 
-    // Naked Single
-    // This method goes over each cell and if there is exactly one candidate (naked single),
-    // it assigns the value and adds the cell to a queue for backtracking.
-    private static Queue<int[]> nakedSingle(int[][] board) {
-        Queue<int[]> queue = new LinkedList<>();
-        boolean changed;
-        do {
-            changed = false;
-            for (int i = 0; i < SIZE; i++) {
-                for (int j = 0; j < SIZE; j++) {
-                    if (board[i][j] == 0) {
-                        int possibleValue = -1;
-                        int count = 0;
+    private static ColumnNode selectColumn() {
+        ColumnNode selected = null;
+        int minSize = Integer.MAX_VALUE;
 
-                        for (int num = 1; num <= 9; num++) {
-                            if (isValid(board, i, j, num)) {
-                                possibleValue = num;
-                                count++;
-                                if (count > 1) break;  // More than one candidate: not a naked single.
-                            }
-                        }
-
-                        if (count == 1) { // Naked single found.
-                            board[i][j] = possibleValue;
-                            queue.add(new int[]{i, j});
-                            changed = true;
-                        }
-                    }
-                }
+        for (ColumnNode col = (ColumnNode) header.R; col != header; col = (ColumnNode) col.R) {
+            if (col.size < minSize) {
+                minSize = col.size;
+                selected = col;
+                if (minSize == 0) break; // Can't get smaller than this
             }
-        } while (changed);
-        return queue;
+        }
+
+        return selected;
     }
 
-    // Hidden Single Technique
-    // examines each row, column, and 3x3 block separately
-    // It looks for a candidate number that has only one possible cell in that unit
-    // When found, that candidate is placed, and the cell's coordinates are added to the queue
-    private static Queue<int[]> hiddenSingle(int[][] board) {
-        Queue<int[]> queue = new LinkedList<>();
-        boolean changed;
-        do {
-            changed = false;
-            // Process rows for hidden singles.
-            for (int row = 0; row < SIZE; row++) {
-                for (int num = 1; num <= 9; num++) {
-                    // Skip if 'num' already exists in the row.
-                    boolean exists = false;
-                    for (int col = 0; col < SIZE; col++) {
-                        if (board[row][col] == num) {
-                            exists = true;
-                            break;
-                        }
-                    }
-                    if (exists) continue;
+    private static int[][] convertSolutionToGrid() {
+        int[][] solution = new int[9][9];
 
-                    int possibleCount = 0;
-                    int possibleCol = -1;
-                    for (int col = 0; col < SIZE; col++) {
-                        if (board[row][col] == 0 && isValid(board, row, col, num)) {
-                            possibleCount++;
-                            possibleCol = col;
-                        }
-                    }
-                    if (possibleCount == 1) {
-                        board[row][possibleCol] = num;
-                        queue.add(new int[]{row, possibleCol});
-                        changed = true;
-                    }
-                }
-            }
-            // Process columns for hidden singles.
-            for (int col = 0; col < SIZE; col++) {
-                for (int num = 1; num <= 9; num++) {
-                    boolean exists = false;
-                    for (int row = 0; row < SIZE; row++) {
-                        if (board[row][col] == num) {
-                            exists = true;
-                            break;
-                        }
-                    }
-                    if (exists) continue;
+        for (DataNode rowNode : answer) {
+            // Find all nodes in this row
+            List<DataNode> nodesInRow = new ArrayList<>();
+            DataNode currentNode = rowNode;
+            do {
+                nodesInRow.add(currentNode);
+                currentNode = currentNode.R;
+            } while (currentNode != rowNode);
 
-                    int possibleCount = 0;
-                    int possibleRow = -1;
-                    for (int row = 0; row < SIZE; row++) {
-                        if (board[row][col] == 0 && isValid(board, row, col, num)) {
-                            possibleCount++;
-                            possibleRow = row;
-                        }
-                    }
-                    if (possibleCount == 1) {
-                        board[possibleRow][col] = num;
-                        queue.add(new int[]{possibleRow, col});
-                        changed = true;
-                    }
-                }
-            }
-            // Process 3x3 blocks for hidden singles.
-            for (int boxRow = 0; boxRow < SIZE; boxRow += 3) {
-                for (int boxCol = 0; boxCol < SIZE; boxCol += 3) {
-                    for (int num = 1; num <= 9; num++) {
-                        boolean exists = false;
-                        for (int i = 0; i < 3; i++) {
-                            for (int j = 0; j < 3; j++) {
-                                if (board[boxRow + i][boxCol + j] == num) {
-                                    exists = true;
-                                    break;
-                                }
-                            }
-                            if (exists) break;
-                        }
-                        if (exists) continue;
+            // Find the cell constraint (0-80)
+            DataNode cellNode = nodesInRow.stream()
+                    .filter(node -> node.C.name < 81)
+                    .findFirst()
+                    .orElseThrow();
 
-                        int possibleCount = 0;
-                        int possibleRow = -1, possibleCol = -1;
-                        for (int i = 0; i < 3; i++) {
-                            for (int j = 0; j < 3; j++) {
-                                if (board[boxRow + i][boxCol + j] == 0 &&
-                                        isValid(board, boxRow + i, boxCol + j, num)) {
-                                    possibleCount++;
-                                    possibleRow = boxRow + i;
-                                    possibleCol = boxCol + j;
-                                }
-                            }
-                        }
-                        if (possibleCount == 1) {
-                            board[possibleRow][possibleCol] = num;
-                            queue.add(new int[]{possibleRow, possibleCol});
-                            changed = true;
-                        }
-                    }
-                }
-            }
-        } while (changed);
-        return queue;
+            int cellConstraint = cellNode.C.name;
+            int row = cellConstraint / 9;
+            int col = cellConstraint % 9;
+
+            // Find the row constraint (81-161) to get the number
+            DataNode rowConstraintNode = nodesInRow.stream()
+                    .filter(node -> node.C.name >= 81 && node.C.name < 162)
+                    .findFirst()
+                    .orElseThrow();
+
+            int num = (rowConstraintNode.C.name - 81) % 9 + 1;
+            solution[row][col] = num;
+        }
+
+        return solution;
     }
 
     // Utility method to print the board.
@@ -228,12 +279,26 @@ public class RMIT_Sudoku_Solver {
         int[][][] boards = SudokuMap.getAllSudokuMaps;
 
         for (int[][] map : boards) {
-            if (solve(map) != null) {
-                printBoard(map);
-                System.out.println();
-            } else {
-                System.out.println("No solution exists");
+            // Create a copy of the original puzzle
+            int[][] puzzleCopy = new int[9][9];
+            for (int i = 0; i < 9; i++) {
+                System.arraycopy(map[i], 0, puzzleCopy[i], 0, 9);
             }
+
+            // Solve the copy and get the solution
+            int[][] solution = solve(puzzleCopy);
+
+            // Print both original and solution
+            System.out.println("Original puzzle:");
+            printBoard(map);
+            System.out.println("\nSolution:");
+
+            if (solution == null) {
+                System.out.println("No solution exists for this puzzle.");
+            } else {
+                printBoard(solution);
+            }
+            System.out.println("\n----------------------\n");
         }
     }
 }

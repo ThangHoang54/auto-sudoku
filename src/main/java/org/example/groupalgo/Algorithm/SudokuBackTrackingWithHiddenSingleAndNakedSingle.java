@@ -4,8 +4,9 @@ import org.example.groupalgo.SudokuMap;
 
 import java.util.LinkedList;
 import java.util.Queue;
+
 //this is backtracking with naked single and hidden single
-public class SudokuSolver2 {
+public class SudokuBackTrackingWithHiddenSingleAndNakedSingle {
     private static final int SIZE = 9;
 
     // The main recursive solver.

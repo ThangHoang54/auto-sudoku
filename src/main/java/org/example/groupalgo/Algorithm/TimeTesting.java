@@ -23,8 +23,8 @@ public class TimeTesting {
         long startTime, endTime;
         startTime = System.nanoTime();
         for (int[][] map : boards) {
-            if (SudokuSolver.solveSudoku(map) != null) { //this one only naked single
-//                SudokuSolver.printBoard(map);
+            if (SudokuBackTrackingWithNakedSingle.solveSudoku(map) != null) { //this one only naked single
+//                SudokuBackTrackingWithNakedSingle.printBoard(map);
 //                System.out.println();
             } else {
                 System.out.println("No solution exists");
@@ -36,8 +36,8 @@ public class TimeTesting {
         boards = deepCopyBoards(SudokuMap.getAllSudokuMaps);//reset the map
         startTime = System.nanoTime();
         for (int[][] map : boards) {
-            if (SudokuSolver2.solveSudoku(map) != null) { //this one only naked single
-//                SudokuSolver2.printBoard(map);
+            if (SudokuBackTrackingWithHiddenSingleAndNakedSingle.solveSudoku(map) != null) { //this one only naked single
+//                SudokuBackTrackingWithHiddenSingleAndNakedSingle.printBoard(map);
 //                System.out.println();
             } else {
                 System.out.println("No solution exists");
@@ -50,7 +50,7 @@ public class TimeTesting {
         startTime = System.nanoTime();
         for (int[][] map : boards) {
             if (SudokuBacktracking.solve(map) != null) { //this one only naked single
-//                SudokuSolver2.printBoard(map);
+//                SudokuBacktracking.printBoard(map);
 //                System.out.println();
             } else {
                 System.out.println("No solution exists");
@@ -63,12 +63,39 @@ public class TimeTesting {
         startTime = System.nanoTime();
         for(int[][] map : boards){
             if(ConstraintSatisfaction.solve(map) != null){
-
+//                ConstraintSatisfaction.printBoard(map);
+//                System.out.println();
             } else{
                 System.out.println("No solution exists");
             }
         }
         endTime = System.nanoTime();
         System.out.println("Time taken: " + (endTime - startTime) + " nanosecond for constraint satisfaction.");
+
+        boards = deepCopyBoards(SudokuMap.getAllSudokuMaps);
+        startTime = System.nanoTime();
+        for(int[][] map : boards){
+            if(DancingLinksArray.solve(map) != null){
+//                DancingLinksArray.printBoard(map);
+//                System.out.println();
+            } else{
+                System.out.println("No solution exists");
+            }
+        }
+        endTime = System.nanoTime();
+        System.out.println("Time taken: " + (endTime - startTime) + " nanosecond for DancingLinksArray.");
+
+        boards = deepCopyBoards(SudokuMap.getAllSudokuMaps);
+        startTime = System.nanoTime();
+        for(int[][] map : boards){
+            if(DancingLinksPureLinkedList.solve(map) != null){
+//                DancingLinksPureLinkedList.printBoard(map);
+//                System.out.println();
+            } else{
+                System.out.println("No solution exists");
+            }
+        }
+        endTime = System.nanoTime();
+        System.out.println("Time taken: " + (endTime - startTime) + " nanosecond for DancingLinksPureLinkedList.");
     }
 }
