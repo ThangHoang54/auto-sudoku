@@ -93,10 +93,10 @@ public class ScreenController {
             System.arraycopy(givenMap[i], 0, board[i], 0, 9);
         }
 
-        if ((map = SudokuBacktracking.solve(board))  != null) { // Solved successfully case
+        if ((map = DancingLinksArray.solve(board))  != null) { // Solved successfully case
             endTime = System.nanoTime(); // End Time
             System.out.println("Solved Sudoku: Case " + (map_index + 1) + " successfully !!!\n");
-            SudokuBacktracking.printBoard(map);
+            DancingLinksArray.printBoard(map);
             System.out.println();
             resultAnnounce.setText("Solved Sudoku: Case " + (map_index + 1) + " successfully !!!");
             initializeGrid();
@@ -106,12 +106,12 @@ public class ScreenController {
         }
 
         if(endTime != 0) {
-            duration = (endTime - startTime) / 1_000_000; // Convert nanoseconds to milliseconds
+            duration = (endTime - startTime); // nanoseconds
         }
 
         //System.out.println("Start time: " + startTime + ", end time: " + endTime + ", duration: " + duration + " ms");
-        System.out.println((map != null) ? "Total executed time take to solve the Sudoku is in: " + duration + " ms" : "");
-        executionTime.setText((map != null) ?  duration + " ms\n" : "N/A");
+        System.out.println((map != null) ? "Total executed time take to solve the Sudoku is in: " + duration + " ns" : "");
+        executionTime.setText((map != null) ?  duration + " ns\n" : "N/A");
     }
 
     @FXML
