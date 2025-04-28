@@ -102,12 +102,6 @@ public class SudokuMap {
 
     //only use in the solver (terminal version) in for loop
     public static int[][][] getAllSudokuMaps = {
-            sudokuMap1,
-            sudokuMap2,
-            sudokuMap3,
-            sudokuMap4,
-            sudokuMap5,
-            sudokuMap6,
-            sudokuMap7
+            sudokuMap1, sudokuMap2, sudokuMap3, sudokuMap4, sudokuMap5, sudokuMap6, sudokuMap7
     };
 }
