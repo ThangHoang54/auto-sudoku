@@ -93,7 +93,10 @@ public class ScreenController {
             System.arraycopy(givenMap[i], 0, board[i], 0, 9);
         }
 
-        if ((map = DancingLinksArray.solve(board))  != null) { // Solved successfully case
+        // Keep tracking memory usage before solving the Sudoku
+        printMemoryUsage("Before solving Sudoku");
+
+        if ((map = DancingLinksArray.solve(board))  != null) { // Solved successful case
             endTime = System.nanoTime(); // End Time
             System.out.println("Solved Sudoku: Case " + (map_index + 1) + " successfully !!!\n");
             DancingLinksArray.printBoard(map);
@@ -105,13 +108,25 @@ public class ScreenController {
             resultAnnounce.setText("No solution found");
         }
 
+        //Keep tracking of the memory used after solving the Sudoku
+        printMemoryUsage("After solving Sudoku");
+
         if(endTime != 0) {
-            duration = (endTime - startTime); // nanoseconds
+            duration = (endTime - startTime) / 1000000; // milliseconds
         }
 
         //System.out.println("Start time: " + startTime + ", end time: " + endTime + ", duration: " + duration + " ms");
-        System.out.println((map != null) ? "Total executed time take to solve the Sudoku is in: " + duration + " ns" : "");
-        executionTime.setText((map != null) ?  duration + " ns\n" : "N/A");
+        System.out.println((map != null) ? "Total executed time take to solve the Sudoku is in: " + duration + " ms" : "");
+        executionTime.setText((map != null) ?  duration + " ms\n" : "N/A");
+    }
+
+    // Print memory usage
+    //Use Runtime to measure the memory usage of the application while executing the algorithm
+    //https://docs.oracle.com/javase/8/docs/api/java/lang/Runtime.html
+    public static void printMemoryUsage(String label) {
+        Runtime runtime = Runtime.getRuntime();
+        long memoryUsed = runtime.totalMemory() - runtime.freeMemory();
+        System.out.println(label + " - Memory Used: " + memoryUsed / (1024 * 1024) + " MB");
     }
 
     @FXML
