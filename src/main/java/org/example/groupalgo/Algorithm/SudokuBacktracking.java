@@ -1,6 +1,7 @@
 package org.example.groupalgo.Algorithm;
 
 import org.example.groupalgo.SudokuMap;
+
 //this is backtracking only
 public class SudokuBacktracking {
     private static final int SIZE = 9;
@@ -72,7 +73,7 @@ public class SudokuBacktracking {
     }
 
     public static void main(String[] args) {
-        // Assuming SudokuMap.getAllSudokuMaps returns an array of Sudoku puzzles.
+        // get all stored boards
         int[][][] boards = SudokuMap.getAllSudokuMaps;
 
         for (int[][] board : boards) {

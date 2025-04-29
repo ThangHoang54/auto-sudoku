@@ -6,10 +6,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
-import org.example.groupalgo.Algorithm.ConstraintSatisfaction;
 import org.example.groupalgo.Algorithm.DancingLinksArray;
-import org.example.groupalgo.Algorithm.DancingLinksPureLinkedList;
-import org.example.groupalgo.Algorithm.SudokuBacktracking;
 
 public class ScreenController {
     @FXML

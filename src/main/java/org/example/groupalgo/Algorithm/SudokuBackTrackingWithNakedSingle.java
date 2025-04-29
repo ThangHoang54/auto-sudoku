@@ -19,17 +19,17 @@ public class SudokuBackTrackingWithNakedSingle {
             if (isValid(board, row, col, num)) {
                 board[row][col] = num;
 
-                Queue<int[]> queue = constraintPropagation(board);//naked single
+                Queue<int[]> queue = nakedSingle(board);//naked single
                 int[][] result = solveSudoku(board);
                 if (result != null) {
                     return result;
                 }
-                board[row][col] = 0; // Backtracking step
+                board[row][col] = 0; // backtracking step reverse
                 while(!queue.isEmpty()) {
                     int[] pair = queue.poll();
                     int rowQueue = pair[0];
                     int colQueue = pair[1];
-                    board[rowQueue][colQueue] = 0; // Backtracking step
+                    board[rowQueue][colQueue] = 0;  // reverse naked single moves
                 }
             }
         }
@@ -65,7 +65,10 @@ public class SudokuBackTrackingWithNakedSingle {
         return null;
     }
 
-    private static Queue<int[]> constraintPropagation(int[][] board) {
+    // Naked Single
+    // This method goes over each cell and if there is exactly one candidate (naked single)
+    // it assigns the value and adds the cell to a queue for backtracking
+    private static Queue<int[]> nakedSingle(int[][] board) {
         Queue<int[]> queue = new LinkedList<>();
         boolean changed;
         do {

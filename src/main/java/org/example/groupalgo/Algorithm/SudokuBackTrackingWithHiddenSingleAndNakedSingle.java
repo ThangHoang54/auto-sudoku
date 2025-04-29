@@ -30,8 +30,9 @@ public class SudokuBackTrackingWithHiddenSingleAndNakedSingle {
                     return result;
                 }
 
-                // Backtracking step: undo assignment.
+                // Backtracking step: undo assignment
                 board[row][col] = 0;
+
                 // Reverse the naked single moves.
                 while (!nakedSingleQueue.isEmpty()) {
                     int[] cell = nakedSingleQueue.poll();
@@ -79,7 +80,7 @@ public class SudokuBackTrackingWithHiddenSingleAndNakedSingle {
     }
 
     // Naked Single
-    // This method goes over each cell and if there is exactly one candidate (naked single),
+    // This method goes over each cell and find if there is exactly one candidate (naked single)
     // it assigns the value and adds the cell to a queue for backtracking.
     private static Queue<int[]> nakedSingle(int[][] board) {
         Queue<int[]> queue = new LinkedList<>();
@@ -121,7 +122,7 @@ public class SudokuBackTrackingWithHiddenSingleAndNakedSingle {
         boolean changed;
         do {
             changed = false;
-            // Process rows for hidden singles.
+            // Process rows for hidden singles
             for (int row = 0; row < SIZE; row++) {
                 for (int num = 1; num <= 9; num++) {
                     // Skip if 'num' already exists in the row.
@@ -149,7 +150,7 @@ public class SudokuBackTrackingWithHiddenSingleAndNakedSingle {
                     }
                 }
             }
-            // Process columns for hidden singles.
+            // Process columns for hidden singles
             for (int col = 0; col < SIZE; col++) {
                 for (int num = 1; num <= 9; num++) {
                     boolean exists = false;
