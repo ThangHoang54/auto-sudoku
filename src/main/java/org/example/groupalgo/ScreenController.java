@@ -14,11 +14,11 @@ public class ScreenController {
     @FXML
     private Text resultAnnounce;
     @FXML
-    private ChoiceBox<String> cb_mapCase;
+    private ChoiceBox<String> cbMapCase;
     @FXML
-    private GridPane sudoku_board;
+    private GridPane sudokuBoard;
 
-    private int map_index;
+    private int mapIndex;
     private int[][] map = SudokuMap.getAllSudokuMaps[0];
     private int[][] givenMap = SudokuMap.getAllSudokuMaps[0];
 
@@ -26,15 +26,15 @@ public class ScreenController {
     public void initialize() {
         initializeGrid();
 
-        cb_mapCase.setOnAction(_ -> {
+        cbMapCase.setOnAction(_ -> {
             resultAnnounce.setText("Click Solve button to get the result");
             executionTime.setText("N/A");
             // Retrieve the selected index from the ComboBox
-            map_index = cb_mapCase.getSelectionModel().getSelectedIndex();
+            mapIndex = cbMapCase.getSelectionModel().getSelectedIndex();
             // Set the selected Sudoku map based on the retrieved index
-            map = SudokuMap.getAllSudokuMaps[map_index];
+            map = SudokuMap.getAllSudokuMaps[mapIndex];
             // Assign the same Sudoku map to the 'givenMap' variable
-            givenMap = SudokuMap.getAllSudokuMaps[map_index];
+            givenMap = SudokuMap.getAllSudokuMaps[mapIndex];
             initializeGrid(); // Reinitialize the grid with the selected map to reflect changes
         });
     }
@@ -67,7 +67,7 @@ public class ScreenController {
                     cell.setText(String.valueOf(map[row][col]));
                     cell.setEditable(false);
                 }
-                sudoku_board.add(cell, col, row);
+                sudokuBoard.add(cell, col, row);
             }
         }
         refreshGridLine();
@@ -75,8 +75,8 @@ public class ScreenController {
 
     private void refreshGridLine(){
         // Forcing refresh the gridLine
-        sudoku_board.setGridLinesVisible(false);
-        sudoku_board.setGridLinesVisible(true);
+        sudokuBoard.setGridLinesVisible(false);
+        sudokuBoard.setGridLinesVisible(true);
     }
 
     @FXML
@@ -95,10 +95,10 @@ public class ScreenController {
 
         if ((map = DancingLinksArray.solve(board))  != null) { // Solved successful case
             endTime = System.nanoTime(); // End Time
-            System.out.println("Solved Sudoku: Case " + (map_index + 1) + " successfully !!!\n");
+            System.out.println("Solved Sudoku: Case " + (mapIndex + 1) + " successfully !!!\n");
             DancingLinksArray.printBoard(map);
             System.out.println();
-            resultAnnounce.setText("Solved Sudoku: Case " + (map_index + 1) + " successfully !!!");
+            resultAnnounce.setText("Solved Sudoku: Case " + (mapIndex + 1) + " successfully !!!");
             initializeGrid();
         } else { // No solution case
             System.out.println("No solution found");
@@ -130,7 +130,7 @@ public class ScreenController {
     void reset(){
         resultAnnounce.setText("Click Solve button to get the result");
         executionTime.setText("N/A");
-        map = SudokuMap.getAllSudokuMaps[map_index];
+        map = SudokuMap.getAllSudokuMaps[mapIndex];
         initializeGrid();
     }
 
