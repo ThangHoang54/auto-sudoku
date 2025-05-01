@@ -6,7 +6,7 @@ import java.util.LinkedList;
 import java.util.Queue;
 
 //this is backtracking with naked single
-public class SudokuBackTrackingWithNakedSingle {
+public class BacktrackingNakedSingle {
     private static final int SIZE = 9;
     public static int[][] solveSudoku(int[][] board) {
 

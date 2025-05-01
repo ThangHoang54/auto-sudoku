@@ -3,7 +3,7 @@ package org.example.groupalgo.Algorithm;
 import org.example.groupalgo.SudokuMap;
 
 //this is backtracking only
-public class SudokuBacktracking {
+public class PureBacktracking {
     private static final int SIZE = 9;
 
     // Modified solve method that returns a solved board or null if no solution exists.

@@ -6,7 +6,7 @@ import java.util.LinkedList;
 import java.util.Queue;
 
 //this is backtracking with naked single and hidden single
-public class SudokuBackTrackingWithHiddenSingleAndNakedSingle {
+public class BacktrackingHiddenSingleNakedSingle {
     private static final int SIZE = 9;
 
     // The main recursive solver.

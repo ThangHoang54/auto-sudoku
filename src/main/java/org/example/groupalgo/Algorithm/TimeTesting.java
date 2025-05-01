@@ -23,7 +23,7 @@ public class TimeTesting {
         long startTime, endTime;
         startTime = System.nanoTime();
         for (int[][] map : boards) {
-            if (SudokuBackTrackingWithNakedSingle.solveSudoku(map) != null) { //this one only naked single
+            if (BacktrackingNakedSingle.solveSudoku(map) != null) { //this one only naked single
 //                SudokuBackTrackingWithNakedSingle.printBoard(map);
 //                System.out.println();
             } else {
@@ -36,7 +36,7 @@ public class TimeTesting {
         boards = deepCopyBoards(SudokuMap.getAllSudokuMaps);//reset the map
         startTime = System.nanoTime();
         for (int[][] map : boards) {
-            if (SudokuBackTrackingWithHiddenSingleAndNakedSingle.solveSudoku(map) != null) { //this one only naked single
+            if (BacktrackingHiddenSingleNakedSingle.solveSudoku(map) != null) { //this one only naked single
 //                SudokuBackTrackingWithHiddenSingleAndNakedSingle.printBoard(map);
 //                System.out.println();
             } else {
@@ -49,7 +49,7 @@ public class TimeTesting {
         boards = deepCopyBoards(SudokuMap.getAllSudokuMaps);
         startTime = System.nanoTime();
         for (int[][] map : boards) {
-            if (SudokuBacktracking.solve(map) != null) { //this one only naked single
+            if (PureBacktracking.solve(map) != null) { //this one only naked single
 //                SudokuBacktracking.printBoard(map);
 //                System.out.println();
             } else {
