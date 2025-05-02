@@ -95,10 +95,10 @@ public class ScreenController {
 
         if ((map = DancingLinksArray.solve(board))  != null) { // Solved successful case
             endTime = System.nanoTime(); // End Time
-            System.out.println("Solved Sudoku: Case " + (mapIndex + 1) + " successfully !!!\n");
+            System.out.println("Solved Sudoku: Case " + (mapIndex + 1) + " successfully\n");
             DancingLinksArray.printBoard(map);
             System.out.println();
-            resultAnnounce.setText("Solved Sudoku: Case " + (mapIndex + 1) + " successfully !!!");
+            resultAnnounce.setText("Solved Sudoku: Case " + (mapIndex + 1) + " successfully");
             initializeGrid();
         } else { // No solution case
             System.out.println("No solution found");
