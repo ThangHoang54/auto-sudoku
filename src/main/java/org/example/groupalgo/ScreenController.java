@@ -81,9 +81,6 @@ public class ScreenController {
 
     @FXML
     public void solveMap() {
-        long startTime = System.nanoTime(); // Start Time
-        long endTime = 0, duration = 0;
-
         int[][] board = new int[9][9];
         // Retrieve data from the original board into int[][]
         for (int i = 0; i < 9; i++) {
@@ -93,6 +90,9 @@ public class ScreenController {
         // Keep tracking memory usage before solving the Sudoku
         printMemoryUsage("Before solving Sudoku");
 
+        long startTime = System.nanoTime(); // Start Time
+        long endTime = 0, duration = 0;
+
         if ((map = DancingLinksArray.solve(board))  != null) { // Solved successful case
             endTime = System.nanoTime(); // End Time
             System.out.println("Solved Sudoku: Case " + (mapIndex + 1) + " successfully\n");
@@ -101,7 +101,7 @@ public class ScreenController {
             resultAnnounce.setText("Solved Sudoku: Case " + (mapIndex + 1) + " successfully");
             initializeGrid();
         } else { // No solution case
-            System.out.println("No solution found");
+            System.out.println("No solution found in sudoku case " + mapIndex);
             resultAnnounce.setText("No solution found");
         }
 
@@ -114,6 +114,7 @@ public class ScreenController {
 
         //System.out.println("Start time: " + startTime + ", end time: " + endTime + ", duration: " + duration + " ms");
         System.out.println((map != null) ? "Total executed time take to solve the Sudoku is in: " + duration + " ms" : "");
+        System.out.println("=".repeat(50));
         executionTime.setText((map != null) ?  duration + " ms\n" : "N/A");
     }
 
