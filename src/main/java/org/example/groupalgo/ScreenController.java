@@ -6,7 +6,6 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
-import org.example.groupalgo.Algorithm.DancingLinksArray;
 
 public class ScreenController {
     @FXML
@@ -93,10 +92,10 @@ public class ScreenController {
         long startTime = System.nanoTime(); // Start Time
         long endTime = 0, duration = 0;
 
-        if ((map = DancingLinksArray.solve(board))  != null) { // Solved successful case
+        if ((map = RMIT_Sudoku_Solver.solve(board))  != null) { // Solved successful case
             endTime = System.nanoTime(); // End Time
             System.out.println("Solved Sudoku: Case " + (mapIndex + 1) + " successfully\n");
-            DancingLinksArray.printBoard(map);
+            RMIT_Sudoku_Solver.printBoard(map);
             System.out.println();
             resultAnnounce.setText("Solved Sudoku: Case " + (mapIndex + 1) + " successfully");
             initializeGrid();
