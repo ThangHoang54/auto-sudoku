@@ -6,7 +6,6 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
-import org.example.groupalgo.Algorithm.DancingLinksArray;
 
 public class ScreenController {
     @FXML
@@ -81,9 +80,6 @@ public class ScreenController {
 
     @FXML
     public void solveMap() {
-        long startTime = System.nanoTime(); // Start Time
-        long endTime = 0, duration = 0;
-
         int[][] board = new int[9][9];
         // Retrieve data from the original board into int[][]
         for (int i = 0; i < 9; i++) {
@@ -92,6 +88,9 @@ public class ScreenController {
 
         // Keep tracking memory usage before solving the Sudoku
         printMemoryUsage("Before solving Sudoku");
+
+        long startTime = System.nanoTime(); // Start Time
+        long endTime = 0, duration = 0;
 
         if ((map = RMIT_Sudoku_Solver.solve(board))  != null) { // Solved successful case
             endTime = System.nanoTime(); // End Time
