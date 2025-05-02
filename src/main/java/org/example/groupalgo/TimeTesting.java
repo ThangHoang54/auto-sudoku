@@ -1,6 +1,6 @@
-package org.example.groupalgo.Algorithm;
+package org.example.groupalgo;
 
-import org.example.groupalgo.SudokuMap;
+import org.example.groupalgo.Algorithm.*;
 
 public class TimeTesting {
     private static void solveWithNakedSingle() {

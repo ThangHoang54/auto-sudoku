@@ -93,10 +93,10 @@ public class ScreenController {
         // Keep tracking memory usage before solving the Sudoku
         printMemoryUsage("Before solving Sudoku");
 
-        if ((map = DancingLinksArray.solve(board))  != null) { // Solved successful case
+        if ((map = RMIT_Sudoku_Solver.solve(board))  != null) { // Solved successful case
             endTime = System.nanoTime(); // End Time
             System.out.println("Solved Sudoku: Case " + (mapIndex + 1) + " successfully\n");
-            DancingLinksArray.printBoard(map);
+            RMIT_Sudoku_Solver.printBoard(map);
             System.out.println();
             resultAnnounce.setText("Solved Sudoku: Case " + (mapIndex + 1) + " successfully");
             initializeGrid();
