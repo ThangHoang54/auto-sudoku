@@ -16,7 +16,13 @@ as input and fill in the missing numbers while ensuring all constraints are met.
   <img src="https://hourglassnewspaper.com/wp-content/uploads/2022/02/normalsolutions.jpg" alt="Sudoku" width="500px">
 </div>
 
-## Getting Start 🚀
+## Getting Started
+- Prerequisites: Java 23.0.2.
+- Clone the repository.
+```shell
+git clone https://github.com/ThangHoang54/AutoSudoku.git
+```
+- Run AutoSudokuApp directly in IntelliJ IDEA.
 
 ## Team members (Group 05) 👨‍💻
 
@@ -31,6 +37,9 @@ as input and fill in the missing numbers while ensuring all constraints are met.
 - Nguyen An Nhien: 
 - Nguyen Hoang Son: 
 - Truong Ba An: 
+
+## Presentation Video
+[Link]()
 
 ## Acknowledgment 🙏
 
