@@ -1,14 +1,25 @@
 package org.example.groupalgo.Algorithm;
 
 import org.example.groupalgo.SudokuMap;
-
 import java.util.*;
 
-//The algorithm solves Sudoku by approaching constraint propagation and backtracking.
+/**
+ * @author Group05
+ */
+
+// This class implements a Sudoku solver using Constraint Satisfaction Problem (CSP) techniques.
 public class ConstraintSatisfaction {
     private static final int SIZE = 9;
 
-    //Set up initial domains for each cell.
+    /**
+     * Initializes the domain (possible values) for each cell in the Sudoku board.
+     * <p>
+     * For assigned cells (non-zero), the domain contains only the assigned value.
+     * For unassigned cells (zero), the domain contains values 1 through 9.
+     *
+     * @param board The 9x9 Sudoku board with initial values (0 represents unassigned cells).
+     * @return A map where keys are cell coordinates in "row-col" format, and values are sets of possible integers.
+     */
     private static Map<String, Set<Integer>> initializeDomains(int[][] board) {
         Map<String, Set<Integer>> domains = new HashMap<>();
         for (int row = 0; row < SIZE; row++) {
@@ -28,7 +39,13 @@ public class ConstraintSatisfaction {
         return domains;
     }
 
-    //Find the first unassigned cell in the board. Returns null if all cells are assigned.
+    /**
+     * Finds the first unassigned cell (with value 0) in the Sudoku board.
+     *
+     * @param board The current state of the Sudoku board.
+     * @param domains The domain map associated with each cell (not used in the method but included for future enhancements).
+     * @return The key of the first unassigned cell in "row-col" format, or {@code null} if all cells are assigned.
+     */
     private static String findUnassigned(int[][] board, Map<String, Set<Integer>> domains) {
         for (int row = 0; row < SIZE; row++) {
             for (int col = 0; col < SIZE; col++) {
@@ -40,7 +57,13 @@ public class ConstraintSatisfaction {
         return null;
     }
 
-    // Get all neighbors of a cell.
+    /**
+     * Retrieves all neighboring cell coordinates (in the same row, column, or 3x3 block)
+     * for the given cell key.
+     *
+     * @param key The key representing the cell in "row-col" format.
+     * @return A list of keys (in "row-col" format) that are neighbors of the given cell.
+     */
     private static List<String> getNeighbors(String key) {
         String[] parts = key.split("-");
         int row = Integer.parseInt(parts[0]);
@@ -69,14 +92,18 @@ public class ConstraintSatisfaction {
         return neighbors;
     }
 
-    // Apply constraints to the domains. Returns true if all constraints are satisfied.
-    // Returns false if a constraint is violated.
-    // If a constraint is violated, the domains are restored to the state before the constraint was applied.
-    // This method is recursive.
-    // The method returns true if all constraints are satisfied.
-    // The method returns false if a constraint is violated.
-    // The method restores the domains to the state before the constraint was applied.
-    // The method returns null if a constraint cannot be satisfied.
+    /**
+     * Applies constraint propagation to reduce the domains of each cell.
+     * <p>
+     * If a cell has only one possible value, that value is removed from the domains
+     * of all its neighbors. This process repeats until no more changes occur.
+     * <p>
+     * If at any point a domain becomes empty, indicating a constraint violation,
+     * the method returns {@code false}.
+     *
+     * @param domains A map of cell coordinates to their possible values (domains).
+     * @return {@code true} if all constraints are satisfied, {@code false} if any constraint is violated.
+     */
     private static boolean applyConstraints(Map<String, Set<Integer>> domains) {
         boolean changed;
         do {
@@ -99,14 +126,15 @@ public class ConstraintSatisfaction {
         return true;
     }
 
-    // Make a deep copy of a map.
-    // The copy is a new map with the same keys and values.
-    // The values in the copy are independent of the original map.
-    // The original map and the copy are different objects.
-    // The original map and the copy are not modified.
-    // The original map and the copy are not affected by changes to the original map.
-    // The original map and the copy are not affected by changes to the copy.
-    // The original map and the copy are independent of each other.
+    /**
+     * Creates a deep copy of a map that maps cell keys to sets of possible integer values.
+     * <p>
+     * Each entry in the returned map contains a new {@link HashSet} instance, ensuring
+     * that modifications to the copy do not affect the original map or vice versa.
+     *
+     * @param original The original map to copy.
+     * @return A deep copy of the input map, with independent keys and value sets.
+     */
     private static Map<String, Set<Integer>> deepCopy(Map<String, Set<Integer>> original) {
         Map<String, Set<Integer>> copy = new HashMap<>();
         for (Map.Entry<String, Set<Integer>> entry : original.entrySet()) {
@@ -115,14 +143,17 @@ public class ConstraintSatisfaction {
         return copy;
     }
 
-    // Backtrack to find a solution.
-    // The method returns the solution if one exists.
-    // The method returns null if no solution exists.
-    // The method is recursive.
-    // The method backtracks to find a solution.
-    // The method returns the solution if one exists.
-    // The method returns null if no solution exists.
-    // The method restores the domains to the state before the constraint was applied.
+    /**
+     * Solves the given Sudoku board using recursive backtracking with constraint propagation.
+     * <p>
+     * This method tries assigning values to unassigned cells by selecting values from
+     * their domains. If constraints are still satisfied after an assignment,
+     * it recurses further. If a dead end is reached, it backtracks and tries another value.
+     *
+     * @param board   The current state of the Sudoku board.
+     * @param domains A map of cell keys to possible values (domains), used to guide search.
+     * @return A completed Sudoku board if a solution is found, or {@code null} if no solution exists.
+     */
     private static int[][] backtrack(int[][] board, Map<String, Set<Integer>> domains) {
         String unassigned = findUnassigned(board, domains);
         if (unassigned == null) {
@@ -153,7 +184,15 @@ public class ConstraintSatisfaction {
         return null; // No solution
     }
 
-    // The main method solves a Sudoku puzzle.
+    /**
+     * Solves a given Sudoku puzzle using constraint propagation and recursive backtracking.
+     * <p>
+     * This method initializes the domains for each cell, applies constraints to reduce the search space,
+     * and then invokes a backtracking algorithm to search for a valid solution.
+     *
+     * @param board A 9x9 Sudoku board where empty cells are represented by 0.
+     * @return A solved 9x9 Sudoku board if a solution exists, or {@code null} if the puzzle is unsolvable.
+     */
     public static int[][] solve(int[][] board) {
         Map<String, Set<Integer>> domains = initializeDomains(board);
 
@@ -164,6 +203,28 @@ public class ConstraintSatisfaction {
         return backtrack(board, domains);
     }
 
+    /**
+     * Utility method to print a 9x9 Sudoku board in a human-readable format.
+     *
+     * The method includes visual separators to distinguish the 3x3 boxes,
+     * enhancing the readability of the output. If the board is {@code null},
+     * the method returns without printing.
+     *
+     * @param board A 9x9 Sudoku board to print; each element should be in the range 1–9.
+     */
+    public static void printBoard(int[][] board) {
+        if (board == null) {
+            return; // Do nothing if board is null
+        }
+        for (int i = 0; i < SIZE; i++) {
+            for (int j = 0; j < SIZE; j++) {
+                // Print the number with a vertical divider after 3rd and 6th columns
+                System.out.print(((j == 2 || j == 5) ? board[i][j] + " | " : board[i][j] + " "));
+            }
+            // Print a horizontal divider after the 3rd and 6th rows
+            System.out.println(((i == 2 || i == 5) ? "\n" + "-".repeat(22) : ""));
+        }
+    }
 
     public static void main(String[] args) {
         // Assuming SudokuMap.getAllSudokuMaps returns an array of Sudoku puzzles.
@@ -183,16 +244,6 @@ public class ConstraintSatisfaction {
                 System.out.println("No solution exists");
                 System.out.println();
             }
-        }
-    }
-
-    // Print the board to standard output.
-    public static void printBoard(int[][] board) {
-        for (int[] row : board) {
-            for (int num : row) {
-                System.out.print(num + " ");
-            }
-            System.out.println();
         }
     }
 }

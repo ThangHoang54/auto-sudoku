@@ -7,6 +7,10 @@ import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 
+/**
+ * @author Group05
+ */
+
 public class ScreenController {
     @FXML
     private Text executionTime;
@@ -21,10 +25,17 @@ public class ScreenController {
     private int[][] map = SudokuMap.getAllSudokuMaps[0];
     private int[][] givenMap = SudokuMap.getAllSudokuMaps[0];
 
+    /**
+     * Initializes the Sudoku UI components when the application starts.
+     * <p>
+     * This method sets up the initial Sudoku grid and configures the ComboBox (`cbMapCase`)
+     * for selecting predefined Sudoku puzzles. When a new puzzle is selected, the grid is
+     * reset and updated accordingly. It also resets the result announcement and execution
+     * time display fields.
+     */
     @FXML
     public void initialize() {
         initializeGrid();
-
         cbMapCase.setOnAction(_ -> {
             resultAnnounce.setText("Click Solve button to get the result");
             executionTime.setText("N/A");
@@ -38,8 +49,17 @@ public class ScreenController {
         });
     }
 
+    /**
+     * Initializes the Sudoku board grid UI with the current state of the puzzle.
+     * <p>
+     * It creates 9x9 `TextField` cells and configures their appearance and interactivity.
+     * Each cell reflects the corresponding value from the `map` array and displays the number
+     * if it is a non-zero value. Bold borders are added to visually distinguish 3x3 subgrids.
+     * <p>
+     * Cells from the initial puzzle (`givenMap`) are styled differently to distinguish
+     * between given numbers and those added later.
+     */
     private void initializeGrid() {
-
         for (int row = 0; row < 9; row++) {
             for (int col = 0; col < 9; col++) {
                 TextField cell = new TextField();
@@ -72,12 +92,29 @@ public class ScreenController {
         refreshGridLine();
     }
 
+    /**
+     * Forces the Sudoku grid to refresh its lines.
+     * <p>
+     * This is a workaround for JavaFX's GridPane not redrawing lines automatically after updates.
+     * The method briefly disables and then re-enables the grid lines visibility.
+     */
     private void refreshGridLine(){
         // Forcing refresh the gridLine
         sudokuBoard.setGridLinesVisible(false);
         sudokuBoard.setGridLinesVisible(true);
     }
 
+    /**
+     * Solves the currently selected Sudoku puzzle using the `RMIT_Sudoku_Solver`.
+     * <p>
+     * The method clones the original `givenMap` to avoid altering the input,
+     * tracks memory usage and execution time, and attempts to solve the puzzle.
+     * If successful, it updates the `map` and re-initializes the grid with the solution.
+     * If no solution is found, an appropriate message is displayed.
+     * <p>
+     * Execution time is measured and displayed in milliseconds. Memory usage is logged
+     * to the console before and after solving.
+     */
     @FXML
     public void solveMap() {
         int[][] board = new int[9][9];
@@ -117,15 +154,24 @@ public class ScreenController {
         executionTime.setText((map != null) ?  duration + " ms\n" : "N/A");
     }
 
-    // Print memory usage
-    //Use Runtime to measure the memory usage of the application while executing the algorithm
-    //https://docs.oracle.com/javase/8/docs/api/java/lang/Runtime.html
+    /**
+     * Prints the current memory usage of the Java Virtual Machine to the console.
+     * <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Runtime.html">...</a>
+     *
+     * @param label A label to identify when the memory usage was recorded (e.g., "Before solving Sudoku").
+     */
     public static void printMemoryUsage(String label) {
         Runtime runtime = Runtime.getRuntime();
         long memoryUsed = runtime.totalMemory() - runtime.freeMemory();
         System.out.println(label + " - Memory Used: " + memoryUsed / (1024 * 1024) + " MB");
     }
 
+    /**
+     * Resets the Sudoku UI to its original state.
+     * <p>
+     * Restores the puzzle to its default configuration (based on the selected map index),
+     * clears the result announcement and execution time display, and re-initializes the grid.
+     */
     @FXML
     void reset(){
         resultAnnounce.setText("Click Solve button to get the result");
@@ -134,6 +180,11 @@ public class ScreenController {
         initializeGrid();
     }
 
+    /**
+     * Exits the application.
+     * <p>
+     * Invokes a system exit with status code 0, which forcibly shuts down the JavaFX program.
+     */
     @FXML
     void exit(){
         System.exit(0);

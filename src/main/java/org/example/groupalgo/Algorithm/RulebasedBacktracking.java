@@ -1,16 +1,44 @@
 package org.example.groupalgo.Algorithm;
 
 import org.example.groupalgo.SudokuMap;
-
 import java.util.LinkedList;
 import java.util.Queue;
 
-//this is backtracking with naked single and hidden single
-public class BacktrackingHiddenSingleNakedSingle {
+/**
+ * @author Group05
+ */
+
+/**
+ * Solves Sudoku puzzles using a combination of rule-based inference and backtracking.
+ * <p>
+ * This solver enhances traditional backtracking by integrating:
+ * <ul>
+ *     <li><b>Naked Single</b>: Assigns values to cells with only one valid candidate.</li>
+ *     <li><b>Hidden Single</b>: Assigns values when a candidate appears in only one possible cell in a row, column, or block.</li>
+ * </ul>
+ * These techniques help prune the search space and improve efficiency.
+ * If no deterministic assignment is possible, the algorithm resorts to backtracking.
+ */
+public class RulebasedBacktracking {
     private static final int SIZE = 9;
 
-    // The main recursive solver.
-    public static int[][] solveSudoku(int[][] board) {
+    /**
+     * Solves the Sudoku puzzle using recursive backtracking and logic-based techniques.
+     * <p>
+     * This method tries placing digits 1–9 in each empty cell recursively.
+     * It uses:
+     * <ul>
+     *   <li>Backtracking to explore possibilities</li>
+     *   <li>Naked Single technique: Assigns cells that can only have one valid value</li>
+     *   <li>Hidden Single technique: Finds unique positions for values in a row/col/box</li>
+     * </ul>
+     * If a number assignment leads to a valid board, recursion continues.
+     * If it leads to a dead-end, it backtracks and undoes all naked/hidden single steps.
+     *
+     * @param board The 9x9 Sudoku board to solve. 0 represents empty cells.
+     * @return A 9x9 board solution, or null if no solution exists.
+     */
+    public static int[][] solve(int[][] board) {
 
         int[] emptyCell = findEmptyCell(board);
         if (emptyCell == null) return board;
@@ -25,7 +53,7 @@ public class BacktrackingHiddenSingleNakedSingle {
                 // Also try the hidden single technique.
                 Queue<int[]> hiddenSingleQueue = hiddenSingle(board);
 
-                int[][] result = solveSudoku(board);
+                int[][] result = solve(board);
                 if (result != null) {
                     return result;
                 }
@@ -48,7 +76,15 @@ public class BacktrackingHiddenSingleNakedSingle {
         return null;
     }
 
-    // Check if placing 'num' at (row, col) is valid.
+    /**
+     * Checks whether placing a number at the given cell violates any Sudoku rules.
+     *
+     * @param board The current Sudoku board.
+     * @param row   The row index of the cell.
+     * @param col   The column index of the cell.
+     * @param num   The number to check.
+     * @return True if the placement is valid, false otherwise.
+     */
     private static boolean isValid(int[][] board, int row, int col, int num) {
         for (int i = 0; i < SIZE; i++) {
             if (board[row][i] == num || board[i][col] == num) {
@@ -67,7 +103,12 @@ public class BacktrackingHiddenSingleNakedSingle {
         return true;
     }
 
-    // Find the next empty cell; returns null if no empty cell remains.
+    /**
+     * Finds the first empty cell (represented by 0) in the board.
+     *
+     * @param board The Sudoku board.
+     * @return An array [row, col] representing the empty cell, or null if the board is full.
+     */
     private static int[] findEmptyCell(int[][] board) {
         for (int i = 0; i < SIZE; i++) {
             for (int j = 0; j < SIZE; j++) {
@@ -79,9 +120,16 @@ public class BacktrackingHiddenSingleNakedSingle {
         return null;
     }
 
-    // Naked Single
-    // This method goes over each cell and find if there is exactly one candidate (naked single)
-    // it assigns the value and adds the cell to a queue for backtracking.
+    /**
+     * Applies the Naked Single technique to the Sudoku board.
+     * <p>
+     * A naked single occurs when a cell has only one valid candidate value.
+     * This method repeatedly scans all cells to find and assign such values.
+     * Every assignment is recorded in a queue so it can be undone during backtracking.
+     *
+     * @param board The current state of the Sudoku board.
+     * @return A queue of coordinates (int[2] arrays) representing the cells modified.
+     */
     private static Queue<int[]> nakedSingle(int[][] board) {
         Queue<int[]> queue = new LinkedList<>();
         boolean changed;
@@ -113,10 +161,17 @@ public class BacktrackingHiddenSingleNakedSingle {
         return queue;
     }
 
-    // Hidden Single Technique
-    // examines each row, column, and 3x3 block separately
-    // It looks for a candidate number that has only one possible cell in that unit
-    // When found, that candidate is placed, and the cell's coordinates are added to the queue
+    /**
+     * Applies the Hidden Single technique to the Sudoku board.
+     * <p>
+     * A hidden single occurs when a number can go in only one cell within a row,
+     * column, or 3x3 block—even if that cell has other candidates.
+     * This method searches each unit (row, column, block) and assigns hidden singles.
+     * Assignments are recorded in a queue for undoing during backtracking.
+     *
+     * @param board The current state of the Sudoku board.
+     * @return A queue of coordinates (int[2] arrays) representing the cells modified.
+     */
     private static Queue<int[]> hiddenSingle(int[][] board) {
         Queue<int[]> queue = new LinkedList<>();
         boolean changed;
@@ -217,13 +272,26 @@ public class BacktrackingHiddenSingleNakedSingle {
         return queue;
     }
 
-    // Utility method to print the board.
+    /**
+     * Utility method to print a 9x9 Sudoku board in a human-readable format.
+     *
+     * The method includes visual separators to distinguish the 3x3 boxes,
+     * enhancing the readability of the output. If the board is {@code null},
+     * the method returns without printing.
+     *
+     * @param board A 9x9 Sudoku board to print; each element should be in the range 1–9.
+     */
     public static void printBoard(int[][] board) {
+        if (board == null) {
+            return; // Do nothing if board is null
+        }
         for (int i = 0; i < SIZE; i++) {
             for (int j = 0; j < SIZE; j++) {
-                System.out.print(board[i][j] + " ");
+                // Print the number with a vertical divider after 3rd and 6th columns
+                System.out.print(((j == 2 || j == 5) ? board[i][j] + " | " : board[i][j] + " "));
             }
-            System.out.println();
+            // Print a horizontal divider after the 3rd and 6th rows
+            System.out.println(((i == 2 || i == 5) ? "\n" + "-".repeat(22) : ""));
         }
     }
 
@@ -231,7 +299,7 @@ public class BacktrackingHiddenSingleNakedSingle {
         int[][][] boards = SudokuMap.getAllSudokuMaps;
 
         for (int[][] map : boards) {
-            if (solveSudoku(map) != null) {
+            if (solve(map) != null) {
                 printBoard(map);
                 System.out.println();
             } else {

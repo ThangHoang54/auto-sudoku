@@ -1,26 +1,20 @@
-package org.example.groupalgo;
+package org.example.groupalgo.Algorithm;
 
+import org.example.groupalgo.SudokuMap;
 import java.util.ArrayList;
 import java.util.List;
+
 /**
  * @author Group05
  */
 
-/**
- * The RMIT Sudoku Solver class that uses Dancing Links (DLX) Algorithm X to solve Sudoku puzzles.
- *
- * This class defines the main structure for solving a 9x9 Sudoku using the exact cover problem
- * representation. It initializes the DLX matrix, sets up constraints for Sudoku rules (cell, row, column, and box),
- * and solves the puzzle by dynamically searching for valid assignments.
- */
-public class RMIT_Sudoku_Solver {
+public class DancingLinks {
     private static final int SIZE = 9; // Size of the Sudoku grid (9x9)
     // Array of ColumnNode objects representing the 324 constraints in the DLX matrix
     private static final ColumnNode[] columns = new ColumnNode[324]; // 81 (cells) + 81 (rows) + 81 (columns) + 81 (boxes)
     private static ColumnNode header; // Header node for the column headers in the DLX matrix
     // List of DataNode objects representing the solution found by DLX
     private static List<DataNode> answer; // Stores the solution once found during the search
-
 
     /**
      * Represents a node in the Dancing Links (DLX) structure.
