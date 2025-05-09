@@ -1,7 +1,8 @@
-package org.example.groupalgo.Algorithm;
+package org.example.groupalgo.Algorithms;
 
+import org.example.groupalgo.DataStructures.DomainMap;
+import org.example.groupalgo.DataStructures.IntSet;
 import org.example.groupalgo.SudokuMap;
-import java.util.*;
 
 /**
  * @author Group05
@@ -20,19 +21,15 @@ public class ConstraintSatisfaction {
      * @param board The 9x9 Sudoku board with initial values (0 represents unassigned cells).
      * @return A map where keys are cell coordinates in "row-col" format, and values are sets of possible integers.
      */
-    private static Map<String, Set<Integer>> initializeDomains(int[][] board) {
-        Map<String, Set<Integer>> domains = new HashMap<>();
+    private static DomainMap initializeDomains(int[][] board) {
+        DomainMap domains = new DomainMap();
         for (int row = 0; row < SIZE; row++) {
             for (int col = 0; col < SIZE; col++) {
                 String key = row + "-" + col;
                 if (board[row][col] != 0) {
-                    domains.put(key, new HashSet<>(Collections.singleton(board[row][col])));
+                    domains.put(key, new IntSet(board[row][col]));
                 } else {
-                    Set<Integer> domain = new HashSet<>();
-                    for (int i = 1; i <= 9; i++) {
-                        domain.add(i);
-                    }
-                    domains.put(key, domain);
+                    domains.put(key, new IntSet());
                 }
             }
         }
@@ -43,10 +40,9 @@ public class ConstraintSatisfaction {
      * Finds the first unassigned cell (with value 0) in the Sudoku board.
      *
      * @param board The current state of the Sudoku board.
-     * @param domains The domain map associated with each cell (not used in the method but included for future enhancements).
      * @return The key of the first unassigned cell in "row-col" format, or {@code null} if all cells are assigned.
      */
-    private static String findUnassigned(int[][] board, Map<String, Set<Integer>> domains) {
+    private static String findUnassigned(int[][] board) {
         for (int row = 0; row < SIZE; row++) {
             for (int col = 0; col < SIZE; col++) {
                 if (board[row][col] == 0) {
@@ -64,33 +60,76 @@ public class ConstraintSatisfaction {
      * @param key The key representing the cell in "row-col" format.
      * @return A list of keys (in "row-col" format) that are neighbors of the given cell.
      */
-    private static List<String> getNeighbors(String key) {
-        String[] parts = key.split("-");
-        int row = Integer.parseInt(parts[0]);
-        int col = Integer.parseInt(parts[1]);
+    private static String[] getNeighbors(String key) {
+        // Parse row and column from the key
+        int dashIndex = key.indexOf('-');
+        int row = parseInt(key.substring(0, dashIndex));
+        int col = parseInt(key.substring(dashIndex + 1));
 
-        List<String> neighbors = new ArrayList<>();
+        String[] neighbors = new String[20]; // Preallocate space for neighbors (max 20)
+        int count = 0;
 
+        // Add neighbors from the same row and same column
         for (int i = 0; i < SIZE; i++) {
-            if (i != col) {
-                neighbors.add(row + "-" + i); // Row neighbors
-            }
-            if (i != row) {
-                neighbors.add(i + "-" + col); // Column neighbors
-            }
+            if (i != col) neighbors[count++] = row + "-" + i; // Row neighbor
+            if (i != row) neighbors[count++] = i + "-" + col; // Column neighbor
         }
 
-        int startRow = row - row % 3, startCol = col - col % 3;
+        // Calculate top-left coordinates of the 3x3 block
+        int startRow = row - row % 3;
+        int startCol = col - col % 3;
+
+        // Add neighbors from the same 3x3 block, excluding the cell itself
         for (int i = startRow; i < startRow + 3; i++) {
             for (int j = startCol; j < startCol + 3; j++) {
                 if (i != row || j != col) {
-                    neighbors.add(i + "-" + j); // Block neighbors
+                    String neighbor = i + "-" + j;
+                    // Avoid duplicates by checking against existing entries
+                    if (!contains(neighbors, count, neighbor)) {
+                        neighbors[count++] = neighbor;
+                    }
                 }
             }
         }
 
-        return neighbors;
+        // Copy relevant entries into a new trimmed array
+        String[] result = new String[count];
+        System.arraycopy(neighbors, 0, result, 0, count);
+        return result;
     }
+
+    /**
+     * Checks whether the given target exists in the array up to a specified length.
+     */
+    private static boolean contains(String[] arr, int len, String target) {
+        for (int i = 0; i < len; i++) {
+            if (equals(arr[i], target)) return true;
+        }
+        return false;
+    }
+
+    /**
+     * Compares two strings for character-by-character equality.
+     */
+    private static boolean equals(String a, String b) {
+        if (a.length() != b.length()) return false;
+        for (int i = 0; i < a.length(); i++) {
+            if (a.charAt(i) != b.charAt(i)) return false;
+        }
+        return true;
+    }
+
+    /**
+     * Parses a non-negative integer from a numeric string.
+     */
+    private static int parseInt(String s) {
+        int num = 0;
+        for (int i = 0; i < s.length(); i++) {
+            num = num * 10 + (s.charAt(i) - '0');
+        }
+        return num;
+    }
+
 
     /**
      * Applies constraint propagation to reduce the domains of each cell.
@@ -104,44 +143,38 @@ public class ConstraintSatisfaction {
      * @param domains A map of cell coordinates to their possible values (domains).
      * @return {@code true} if all constraints are satisfied, {@code false} if any constraint is violated.
      */
-    private static boolean applyConstraints(Map<String, Set<Integer>> domains) {
+    private static boolean applyConstraints(DomainMap domains) {
         boolean changed;
         do {
             changed = false;
-            for (String key : domains.keySet()) {
-                Set<Integer> domain = domains.get(key);
-                if (domain.size() == 1) {
-                    int value = domain.iterator().next();
-                    for (String neighbor : getNeighbors(key)) {
-                        if (domains.get(neighbor).remove(value)) {
-                            changed = true;
-                        }
-                        if (domains.get(neighbor).isEmpty()) {
-                            return false; // Constraint violated
+            // Retrieve the keys (cell identifiers) of all domains in the map
+            String[] keys = domains.keySet();
+            // Iterate over all the keys (cells) to check for cells with a single value
+            for (String key : keys) {
+                IntSet domain = domains.get(key);
+                // If the domain contains only one value (naked single)
+                if (domain.getSize() == 1) {
+                    int val = domain.getOnlyValue();        // Get the single value from the domain
+                    String[] neighbors = getNeighbors(key); // Get all the neighbors of the current cell
+                    // Iterate over each neighbor of the current cell
+                    for (String neighbor : neighbors) {
+                        IntSet neighborDomain = domains.get(neighbor);
+                        // If the neighbor has a domain and the value is in its domain, remove it
+                        if (neighborDomain != null && neighborDomain.remove(val)) {
+                            changed = true; // Mark that a change was made
+                            // If the neighbor's domain becomes empty, a conflict occurs
+                            if (neighborDomain.getSize() == 0) {
+                                return false; // Return false if a conflict is found
+                            }
                         }
                     }
                 }
             }
-        } while (changed);
-        return true;
+        } while (changed); // Repeat until no changes occur in a full pass
+
+        return true; // Return true if constraints were satisfied without any conflicts
     }
 
-    /**
-     * Creates a deep copy of a map that maps cell keys to sets of possible integer values.
-     * <p>
-     * Each entry in the returned map contains a new {@link HashSet} instance, ensuring
-     * that modifications to the copy do not affect the original map or vice versa.
-     *
-     * @param original The original map to copy.
-     * @return A deep copy of the input map, with independent keys and value sets.
-     */
-    private static Map<String, Set<Integer>> deepCopy(Map<String, Set<Integer>> original) {
-        Map<String, Set<Integer>> copy = new HashMap<>();
-        for (Map.Entry<String, Set<Integer>> entry : original.entrySet()) {
-            copy.put(entry.getKey(), new HashSet<>(entry.getValue()));
-        }
-        return copy;
-    }
 
     /**
      * Solves the given Sudoku board using recursive backtracking with constraint propagation.
@@ -154,22 +187,26 @@ public class ConstraintSatisfaction {
      * @param domains A map of cell keys to possible values (domains), used to guide search.
      * @return A completed Sudoku board if a solution is found, or {@code null} if no solution exists.
      */
-    private static int[][] backtrack(int[][] board, Map<String, Set<Integer>> domains) {
-        String unassigned = findUnassigned(board, domains);
+    private static int[][] backtrack(int[][] board, DomainMap domains) {
+        String unassigned = findUnassigned(board);
         if (unassigned == null) {
-            return board; // All cells are assigned
+            return board;
         }
 
-        String[] parts = unassigned.split("-");
-        int row = Integer.parseInt(parts[0]);
-        int col = Integer.parseInt(parts[1]);
+        int dashIndex = unassigned.indexOf('-');
+        int row = parseInt(unassigned.substring(0, dashIndex));
+        int col = parseInt(unassigned.substring(dashIndex + 1));
 
-        for (int value : domains.get(unassigned)) {
-            board[row][col] = value;
+        IntSet domain = domains.get(unassigned);
+        int[] values = domain.getValues();
 
-            Map<String, Set<Integer>> snapshot = deepCopy(domains);
-            snapshot.get(unassigned).clear();
-            snapshot.get(unassigned).add(value);
+        for (int i = 0; i < domain.getSize(); i++) {
+            int val = values[i];
+            board[row][col] = val;
+
+            DomainMap snapshot = domains.copy();
+            IntSet newDomain = new IntSet(val);
+            snapshot.put(unassigned, newDomain);
 
             if (applyConstraints(snapshot)) {
                 int[][] result = backtrack(board, snapshot);
@@ -178,10 +215,9 @@ public class ConstraintSatisfaction {
                 }
             }
 
-            board[row][col] = 0; // Backtrack
+            board[row][col] = 0; // backtrack
         }
-
-        return null; // No solution
+        return null;
     }
 
     /**
@@ -194,7 +230,7 @@ public class ConstraintSatisfaction {
      * @return A solved 9x9 Sudoku board if a solution exists, or {@code null} if the puzzle is unsolvable.
      */
     public static int[][] solve(int[][] board) {
-        Map<String, Set<Integer>> domains = initializeDomains(board);
+        DomainMap domains = initializeDomains(board);
 
         if (!applyConstraints(domains)) {
             return null; // Return null if constraints cannot be satisfied
@@ -216,13 +252,18 @@ public class ConstraintSatisfaction {
         if (board == null) {
             return; // Do nothing if board is null
         }
-        for (int i = 0; i < SIZE; i++) {
-            for (int j = 0; j < SIZE; j++) {
-                // Print the number with a vertical divider after 3rd and 6th columns
-                System.out.print(((j == 2 || j == 5) ? board[i][j] + " | " : board[i][j] + " "));
-            }
+
+        for (int i = 0; i < 9; i++) {
             // Print a horizontal divider after the 3rd and 6th rows
-            System.out.println(((i == 2 || i == 5) ? "\n" + "-".repeat(22) : ""));
+            if (i % 3 == 0 && i != 0) {
+                System.out.println("------+-------+------");
+            }
+            for (int j = 0; j < 9; j++) {
+                // Print the number with a vertical divider after 3rd and 6th columns
+                if (j % 3 == 0 && j != 0) System.out.print("| ");
+                System.out.print(board[i][j] + " ");
+            }
+            System.out.println();
         }
     }
 

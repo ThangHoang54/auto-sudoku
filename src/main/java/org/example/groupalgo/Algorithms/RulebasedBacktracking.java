@@ -1,8 +1,7 @@
-package org.example.groupalgo.Algorithm;
+package org.example.groupalgo.Algorithms;
 
 import org.example.groupalgo.SudokuMap;
-import java.util.LinkedList;
-import java.util.Queue;
+import org.example.groupalgo.DataStructures.IntArrayQueue;
 
 /**
  * @author Group05
@@ -49,9 +48,9 @@ public class RulebasedBacktracking {
                 board[row][col] = num;
 
                 // Apply the naked single technique
-                Queue<int[]> nakedSingleQueue = nakedSingle(board);
+                IntArrayQueue nakedSingleQueue = nakedSingle(board);
                 // Also try the hidden single technique.
-                Queue<int[]> hiddenSingleQueue = hiddenSingle(board);
+                IntArrayQueue hiddenSingleQueue = hiddenSingle(board);
 
                 int[][] result = solve(board);
                 if (result != null) {
@@ -63,12 +62,12 @@ public class RulebasedBacktracking {
 
                 // Reverse the naked single moves.
                 while (!nakedSingleQueue.isEmpty()) {
-                    int[] cell = nakedSingleQueue.poll();
+                    int[] cell = nakedSingleQueue.dequeue();
                     board[cell[0]][cell[1]] = 0;
                 }
                 // Reverse the hidden single moves.
                 while (!hiddenSingleQueue.isEmpty()) {
-                    int[] cell = hiddenSingleQueue.poll();
+                    int[] cell = hiddenSingleQueue.dequeue();
                     board[cell[0]][cell[1]] = 0;
                 }
             }
@@ -130,8 +129,8 @@ public class RulebasedBacktracking {
      * @param board The current state of the Sudoku board.
      * @return A queue of coordinates (int[2] arrays) representing the cells modified.
      */
-    private static Queue<int[]> nakedSingle(int[][] board) {
-        Queue<int[]> queue = new LinkedList<>();
+    private static IntArrayQueue nakedSingle(int[][] board) {
+        IntArrayQueue queue = new IntArrayQueue(SIZE);
         boolean changed;
         do {
             changed = false;
@@ -151,7 +150,7 @@ public class RulebasedBacktracking {
 
                         if (count == 1) { // Naked single found.
                             board[i][j] = possibleValue;
-                            queue.add(new int[]{i, j});
+                            queue.enqueue(new int[]{i, j});
                             changed = true;
                         }
                     }
@@ -163,17 +162,18 @@ public class RulebasedBacktracking {
 
     /**
      * Applies the Hidden Single technique to the Sudoku board.
-     * <p>
-     * A hidden single occurs when a number can go in only one cell within a row,
-     * column, or 3x3 block—even if that cell has other candidates.
-     * This method searches each unit (row, column, block) and assigns hidden singles.
-     * Assignments are recorded in a queue for undoing during backtracking.
+     * A hidden single occurs when a number can go in only one possible cell
+     * within a row, column, or 3x3 block—even if that cell has other candidates.
+     *
+     * This method scans each unit (row, column, block) repeatedly until no more
+     * hidden singles are found. All modifications are stored in a queue so they
+     * can be undone during backtracking.
      *
      * @param board The current state of the Sudoku board.
-     * @return A queue of coordinates (int[2] arrays) representing the cells modified.
+     * @return A queue of coordinates (int[2] arrays) representing the modified cells.
      */
-    private static Queue<int[]> hiddenSingle(int[][] board) {
-        Queue<int[]> queue = new LinkedList<>();
+    private static IntArrayQueue hiddenSingle(int[][] board) {
+        IntArrayQueue queue = new IntArrayQueue(SIZE);
         boolean changed;
         do {
             changed = false;
@@ -200,7 +200,7 @@ public class RulebasedBacktracking {
                     }
                     if (possibleCount == 1) {
                         board[row][possibleCol] = num;
-                        queue.add(new int[]{row, possibleCol});
+                        queue.enqueue(new int[]{row, possibleCol});
                         changed = true;
                     }
                 }
@@ -227,7 +227,7 @@ public class RulebasedBacktracking {
                     }
                     if (possibleCount == 1) {
                         board[possibleRow][col] = num;
-                        queue.add(new int[]{possibleRow, col});
+                        queue.enqueue(new int[]{possibleRow, col});
                         changed = true;
                     }
                 }
@@ -262,7 +262,7 @@ public class RulebasedBacktracking {
                         }
                         if (possibleCount == 1) {
                             board[possibleRow][possibleCol] = num;
-                            queue.add(new int[]{possibleRow, possibleCol});
+                            queue.enqueue(new int[]{possibleRow, possibleCol});
                             changed = true;
                         }
                     }
@@ -285,13 +285,18 @@ public class RulebasedBacktracking {
         if (board == null) {
             return; // Do nothing if board is null
         }
-        for (int i = 0; i < SIZE; i++) {
-            for (int j = 0; j < SIZE; j++) {
-                // Print the number with a vertical divider after 3rd and 6th columns
-                System.out.print(((j == 2 || j == 5) ? board[i][j] + " | " : board[i][j] + " "));
-            }
+
+        for (int i = 0; i < 9; i++) {
             // Print a horizontal divider after the 3rd and 6th rows
-            System.out.println(((i == 2 || i == 5) ? "\n" + "-".repeat(22) : ""));
+            if (i % 3 == 0 && i != 0) {
+                System.out.println("------+-------+------");
+            }
+            for (int j = 0; j < 9; j++) {
+                // Print the number with a vertical divider after 3rd and 6th columns
+                if (j % 3 == 0 && j != 0) System.out.print("| ");
+                System.out.print(board[i][j] + " ");
+            }
+            System.out.println();
         }
     }
 

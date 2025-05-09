@@ -1,7 +1,6 @@
 package org.example.groupalgo;
 
-import java.util.ArrayList;
-import java.util.List;
+import org.example.groupalgo.DataStructures.MyArrayList;
 /**
  * @author Group05
  */
@@ -19,7 +18,7 @@ public class RMIT_Sudoku_Solver {
     private static final ColumnNode[] columns = new ColumnNode[324]; // 81 (cells) + 81 (rows) + 81 (columns) + 81 (boxes)
     private static ColumnNode header; // Header node for the column headers in the DLX matrix
     // List of DataNode objects representing the solution found by DLX
-    private static List<DataNode> answer; // Stores the solution once found during the search
+    private static MyArrayList<DataNode> answer; // Stores the solution once found during the search
 
 
     /**
@@ -209,7 +208,7 @@ public class RMIT_Sudoku_Solver {
             }
         }
         // Attempt to solve the puzzle using DLX search
-        answer = new ArrayList<>();
+        answer = new MyArrayList<>();
         if (!search(0)) {
             // No solution found
             return null;
@@ -394,41 +393,57 @@ public class RMIT_Sudoku_Solver {
     private static int[][] convertSolutionToGrid() {
         int[][] solution = new int[9][9];
 
-        // Iterate through each selected row in the solution
-        for (DataNode rowNode : answer) {
+        for (int i = 0; i < answer.getSize(); i++) {
+            DataNode rowNode = answer.get(i);
+
             // Collect all four nodes in the current DLX row
-            List<DataNode> nodesInRow = new ArrayList<>();
+            MyArrayList<DataNode> nodesInRow = new MyArrayList<>();
             DataNode currentNode = rowNode;
             do {
                 nodesInRow.add(currentNode);
                 currentNode = currentNode.R;
             } while (currentNode != rowNode);
 
-            // Find the node corresponding to the cell constraint (constraint ID 0–80)
-            DataNode cellNode = nodesInRow.stream()
-                    .filter(node -> node.C.name < 81)
-                    .findFirst()
-                    .orElseThrow(); // Should always be present
+            // Find the cellNode (C.name < 81)
+            DataNode cellNode = null;
+            for (int j = 0; j < nodesInRow.getSize(); j++) {
+                DataNode node = nodesInRow.get(j);
+                if (node.C.name < 81) {
+                    cellNode = node;
+                    break;
+                }
+            }
+
+            if (cellNode == null) {
+                return null; // Should never happen
+            }
 
             int cellConstraint = cellNode.C.name;
-            int row = cellConstraint / 9;  // Extract row index from constraint ID
-            int col = cellConstraint % 9;  // Extract column index from constraint ID
+            int row = cellConstraint / 9;
+            int col = cellConstraint % 9;
 
-            // Find the node corresponding to the row constraint (constraint ID 81–161)
-            DataNode rowConstraintNode = nodesInRow.stream()
-                    .filter(node -> node.C.name >= 81 && node.C.name < 162)
-                    .findFirst()
-                    .orElseThrow(); // Should always be present
+            // Find the rowConstraintNode (C.name between 81 and 161)
+            DataNode rowConstraintNode = null;
+            for (int j = 0; j < nodesInRow.getSize(); j++) {
+                DataNode node = nodesInRow.get(j);
+                if (node.C.name >= 81 && node.C.name < 162) {
+                    rowConstraintNode = node;
+                    break;
+                }
+            }
 
-            // Extract number from row constraint ID and adjust to 1–9 range
+            if (rowConstraintNode == null) {
+                return null; // Should never happen
+            }
+
             int num = (rowConstraintNode.C.name - 81) % 9 + 1;
 
-            // Place the number into the solution grid
             solution[row][col] = num;
         }
 
         return solution;
     }
+
 
     /**
      * Utility method to print a 9x9 Sudoku board in a human-readable format.
@@ -443,13 +458,18 @@ public class RMIT_Sudoku_Solver {
         if (board == null) {
             return; // Do nothing if board is null
         }
-        for (int i = 0; i < SIZE; i++) {
-            for (int j = 0; j < SIZE; j++) {
-                // Print the number with a vertical divider after 3rd and 6th columns
-                System.out.print(((j == 2 || j == 5) ? board[i][j] + " | " : board[i][j] + " "));
-            }
+
+        for (int i = 0; i < 9; i++) {
             // Print a horizontal divider after the 3rd and 6th rows
-            System.out.println(((i == 2 || i == 5) ? "\n" + "-".repeat(22) : ""));
+            if (i % 3 == 0 && i != 0) {
+                System.out.println("------+-------+------");
+            }
+            for (int j = 0; j < 9; j++) {
+                // Print the number with a vertical divider after 3rd and 6th columns
+                if (j % 3 == 0 && j != 0) System.out.print("| ");
+                System.out.print(board[i][j] + " ");
+            }
+            System.out.println();
         }
     }
 
