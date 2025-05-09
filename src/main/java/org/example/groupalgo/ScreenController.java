@@ -10,6 +10,8 @@ import org.example.groupalgo.Algorithms.ConstraintSatisfaction;
 import org.example.groupalgo.Algorithms.DancingLinks;
 import org.example.groupalgo.Algorithms.RulebasedBacktracking;
 
+import java.text.DecimalFormat;
+
 /**
  * @author Group05
  */
@@ -130,7 +132,8 @@ public class ScreenController {
         printMemoryUsage("Before solving Sudoku");
 
         long startTime = System.nanoTime(); // Start Time
-        long endTime = 0, duration = 0;
+        long endTime = 0;
+        double duration = 0;
 
         if ((map = RMIT_Sudoku_Solver.solve(board)) != null) { // Solved successful case
             endTime = System.nanoTime(); // End Time
@@ -148,13 +151,13 @@ public class ScreenController {
         printMemoryUsage("After solving Sudoku");
 
         if(endTime != 0) {
-            duration = (endTime - startTime) / 1000000; // milliseconds
+            duration = (double) (endTime - startTime) / 1000000; // milliseconds
         }
 
         //System.out.println("Start time: " + startTime + ", end time: " + endTime + ", duration: " + duration + " ms");
-        System.out.println((map != null) ? "Total executed time take to solve the Sudoku is in: " + duration + " ms" : "");
+        System.out.println((map != null) ? "Total executed time take to solve the Sudoku is in: " + new DecimalFormat("0.00").format(duration) + " ms" : "");
         System.out.println("=".repeat(50));
-        executionTime.setText((map != null) ?  duration + " ms\n" : "N/A");
+        executionTime.setText((map != null) ? new DecimalFormat("0.00").format(duration) + " ms\n" : "N/A");
     }
 
     /**
@@ -165,8 +168,8 @@ public class ScreenController {
      */
     public static void printMemoryUsage(String label) {
         Runtime runtime = Runtime.getRuntime();
-        long memoryUsed = runtime.totalMemory() - runtime.freeMemory();
-        System.out.println(label + " - Memory Used: " + memoryUsed / (1024 * 1024) + " MB");
+        double memoryUsed = runtime.totalMemory() - runtime.freeMemory();
+        System.out.println(label + " - Memory Used: " + new DecimalFormat("0.00").format(memoryUsed/(1024*1024)) + " MB");
     }
 
     /**
