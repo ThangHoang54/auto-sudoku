@@ -6,6 +6,9 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
+import org.example.groupalgo.Algorithms.ConstraintSatisfaction;
+import org.example.groupalgo.Algorithms.DancingLinks;
+import org.example.groupalgo.Algorithms.RulebasedBacktracking;
 
 /**
  * @author Group05

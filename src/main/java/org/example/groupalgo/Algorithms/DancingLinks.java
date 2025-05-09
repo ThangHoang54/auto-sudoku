@@ -8,7 +8,6 @@ import org.example.groupalgo.SudokuMap;
  */
 
 public class DancingLinks {
-    private static final int SIZE = 9; // Size of the Sudoku grid (9x9)
     // Array of ColumnNode objects representing the 324 constraints in the DLX matrix
     private static final ColumnNode[] columns = new ColumnNode[324]; // 81 (cells) + 81 (rows) + 81 (columns) + 81 (boxes)
     private static ColumnNode header; // Header node for the column headers in the DLX matrix

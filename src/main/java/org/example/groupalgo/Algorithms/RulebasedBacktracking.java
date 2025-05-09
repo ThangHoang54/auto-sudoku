@@ -286,12 +286,12 @@ public class RulebasedBacktracking {
             return; // Do nothing if board is null
         }
 
-        for (int i = 0; i < 9; i++) {
+        for (int i = 0; i < SIZE; i++) {
             // Print a horizontal divider after the 3rd and 6th rows
             if (i % 3 == 0 && i != 0) {
                 System.out.println("------+-------+------");
             }
-            for (int j = 0; j < 9; j++) {
+            for (int j = 0; j < SIZE; j++) {
                 // Print the number with a vertical divider after 3rd and 6th columns
                 if (j % 3 == 0 && j != 0) System.out.print("| ");
                 System.out.print(board[i][j] + " ");
