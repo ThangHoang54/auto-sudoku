@@ -33,10 +33,10 @@ git clone https://github.com/ThangHoang54/AutoSudoku.git
 
 ## Contribution Score 🏅
 
-- Hoang Minh Thang (s3999925): 6.25
-- Nguyen An Nhien (s4001453): 6.25
-- Nguyen Hoang Son (s3990627): 6.25
-- Truong Ba An (s3999568): 6.25
+- Hoang Minh Thang (s3999925): 5
+- Nguyen An Nhien (s4001453): 5
+- Nguyen Hoang Son (s3990627): 5
+- Truong Ba An (s3999568): 5
 
 ## Presentation Video
 [Project Demo Record Video]()
