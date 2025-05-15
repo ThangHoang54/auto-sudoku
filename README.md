@@ -39,7 +39,7 @@ git clone https://github.com/ThangHoang54/AutoSudoku.git
 - Truong Ba An (s3999568): 5
 
 ## Presentation Video
-[Project Demo Record Video]()
+[Project Demo Record Video](https://rmiteduau-my.sharepoint.com/:v:/g/personal/s3999925_rmit_edu_vn/Ear8X206tj5AqZhPBPmztmgBbVl05Udtlv-p9ER5wJhzhA?nav=eyJyZWZlcnJhbEluZm8iOnsicmVmZXJyYWxBcHAiOiJPbmVEcml2ZUZvckJ1c2luZXNzIiwicmVmZXJyYWxBcHBQbGF0Zm9ybSI6IldlYiIsInJlZmVycmFsTW9kZSI6InZpZXciLCJyZWZlcnJhbFZpZXciOiJNeUZpbGVzTGlua0NvcHkifX0&e=cO1hqi)
 
 ## Acknowledgment 🙏
 
