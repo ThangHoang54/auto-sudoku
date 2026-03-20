@@ -3,8 +3,6 @@
 In this project, we will design and implement a Sudoku Solver - a Java program that  automatically finds solutions for Sudoku puzzles using efficient algorithms.
 This project serves as the group assignment for COSC2469 Algorithms and Analysis (2025A) course.
 
-GitHub repository link: [https://github.com/ThangHoang54/AutoSudoku](https://github.com/ThangHoang54/AutoSudoku)
-
 ## Sudoku Overview ℹ️
 
 Sudoku is a 9x9 grid-based puzzle where each row, column, and 3x3 subgrid must contain 
@@ -20,7 +18,7 @@ as input and fill in the missing numbers while ensuring all constraints are met.
 - Prerequisites: Java 23.0.2.
 - Clone the repository.
 ```shell
-git clone https://github.com/ThangHoang54/AutoSudoku.git
+git clone https://github.com/ThangHoang54/autoS-sudoku.git
 ```
 - Run AutoSudokuApp directly in IntelliJ IDEA.
 
