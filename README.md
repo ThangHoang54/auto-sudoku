@@ -18,7 +18,7 @@ as input and fill in the missing numbers while ensuring all constraints are met.
 - Prerequisites: Java 23.0.2.
 - Clone the repository.
 ```shell
-git clone https://github.com/ThangHoang54/autoS-sudoku.git
+git clone https://github.com/ThangHoang54/auto-sudoku.git
 ```
 - Run AutoSudokuApp directly in IntelliJ IDEA.
 
