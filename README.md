@@ -24,9 +24,9 @@ git clone https://github.com/ThangHoang54/auto-sudoku.git
 
 ## Team members (Group 05) 👨‍💻
 
-- **Hoang Minh Thang <a href="https://github.com/ThangHoang" target="_blank"><img src="https://skillicons.dev/icons?i=github" width="20px" /></a>**
+- **Hoang Minh Thang <a href="https://github.com/ThangHoang54" target="_blank"><img src="https://skillicons.dev/icons?i=github" width="20px" /></a>**
 - **Nguyen An Nhien <a href="https://github.com/koromaki88" target="_blank"><img src="https://skillicons.dev/icons?i=github" width="20px" /></a>**
-- **Nguyen Hoang Son <a href="https://github.com/08-10-2000" target="_blank"><img src="https://skillicons.dev/icons?i=github" width="20px" /></a>**
+- **Nguyen Hoang Son <a href="https://github.com/HoangSon0810" target="_blank"><img src="https://skillicons.dev/icons?i=github" width="20px" /></a>**
 - **Truong Ba An <a href="https://github.com/truongbaan" target="_blank"><img src="https://skillicons.dev/icons?i=github" width="20px" /></a>**
 
 ## Contribution Score 🏅
